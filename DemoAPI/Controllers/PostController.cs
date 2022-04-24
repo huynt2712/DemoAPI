@@ -10,7 +10,13 @@ namespace DemoAPI.Controllers
         [Route("/posts")]
         public IActionResult Index()
         {
-            return Ok(PostList.GetListPost());
+            return Ok(PostList.GetListPost(string.Empty));
+        }
+        [HttpGet]
+        [Route("/posts/filter/{searchField}")]
+        public IActionResult Index(string searchField)
+        {
+            return Ok(PostList.GetListPost(searchField));
         }
     }
 }
