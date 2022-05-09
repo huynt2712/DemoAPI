@@ -1,0 +1,57 @@
+header {
+  border-bottom: 3px solid #f2f2f2;
+}
+
+.header-menu {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto 10px;
+  width: 300px;
+  padding: 0;
+}
+
+.header-menu li {
+  cursor: pointer;
+  padding: 5px 5px 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+.postListContent {
+  margin: 30px auto;
+  width: 500px;
+}
+
+.list-button {
+  width: 325px;
+  text-align: center;
+  margin: 10px auto;
+}
+
+#posts {
+  padding: 0px;
+}
+
+#posts li {
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.post {
+  position: relative;
+  padding-left: 167px;
+  min-height: 141px;
+}
+
+.post img {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.post p {
+  text-align: justify;
+}

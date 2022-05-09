@@ -5,16 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <h1>API DEMO</h1>
-    <form name="form"><input type="text" name="filter" /></form>
+    <header>
+      <ul class="header-menu">
+        <li>Trang chủ</li>
+        <li>Blog</li>
+        <li>CV</li>
+        <li>Và tôi</li>
+      </ul>
+    </header>
 
-    <ul id="products"></ul>
+    <!-- <img src="./img/blog.png" alt="" style="width: 30px; height: 30px" /> -->
 
-    <button id="btnProducts">Get List Products</button>
-    <button id="btnClear">Clear</button>
-    <button id="btnFilter">Filter</button>
+    <div class="postListContent">
+      <!-- <form name="form">
+      <input type="text" name="filter" />
+    </form> -->
+      <ul id="posts"></ul>
+    </div>
+    <div class="list-button">
+      <!-- <button id="btnProducts">Get List Products</button> -->
+      <!-- <button id="btnClear">Clear</button> -->
+      <button id="btnFilter">Filter</button>
+      <button id="btnDelete">Delete</button>
+      <button id="btnPost">Post</button>
+    </div>
 
     <script src="./script.js"></script>
   </body>

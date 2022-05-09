@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoAPI", "DemoAPI\DemoAPI.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinqDemo", "LinqDemo\LinqDemo.csproj", "{FAC70084-7E7D-4281-9C99-515332DAC0E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreDemo", "EFCoreDemo\EFCoreDemo.csproj", "{2E38D87D-0D1C-4087-9788-9434E2FF66CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreDemo", "EFCoreDemo\EFCoreDemo.csproj", "{2E38D87D-0D1C-4087-9788-9434E2FF66CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoCodeFirstDB", "DemoCodeFirstDB\DemoCodeFirstDB.csproj", "{E7680391-D9A3-4D95-BFDE-ABE35B0DC500}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiCodeFirstDB", "WebApiCodeFirstDB\WebApiCodeFirstDB.csproj", "{FF08C0B9-27F3-4A05-B6DF-B5F033E89243}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{2E38D87D-0D1C-4087-9788-9434E2FF66CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E38D87D-0D1C-4087-9788-9434E2FF66CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E38D87D-0D1C-4087-9788-9434E2FF66CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7680391-D9A3-4D95-BFDE-ABE35B0DC500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7680391-D9A3-4D95-BFDE-ABE35B0DC500}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7680391-D9A3-4D95-BFDE-ABE35B0DC500}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7680391-D9A3-4D95-BFDE-ABE35B0DC500}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF08C0B9-27F3-4A05-B6DF-B5F033E89243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF08C0B9-27F3-4A05-B6DF-B5F033E89243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF08C0B9-27F3-4A05-B6DF-B5F033E89243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF08C0B9-27F3-4A05-B6DF-B5F033E89243}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
