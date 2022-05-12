@@ -1,5 +1,5 @@
 function getPostCategoryList() {
-  const url = "https://localhost:7213/api/PostCategory";
+  const url = "https://localhost:7213/api/Post";
   const ulElement = document.getElementById("posts");
 
   if (ulElement) {
@@ -16,7 +16,7 @@ function getPostCategoryList() {
           let liElement = document.createElement("li");
           var data =
             '<div class="post">' +
-            `<img src="${post.description}" alt="" style="width:150px;height:140px">` +
+            `<img src="${post.image}" alt="" style="width:150px;height:140px">` +
             `<p>${post.title}</p>` +
             `<p>${post.content}</p>` +
             "</div>";

@@ -4,7 +4,7 @@ using WebApiCodeFirstDB.Models;
 
 namespace WebApiCodeFirstDB.Data
 {
-    public class PostContext : DbContext
+    public class BlogDBContext : DbContext
     {
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostCategory> Categories { get; set; }
@@ -13,7 +13,7 @@ namespace WebApiCodeFirstDB.Data
             optionsBuilder
                 .UseLazyLoadingProxies()
                 .ConfigureWarnings(w => w.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning))
-                .UseSqlServer("Data Source=MSI;Initial Catalog=PostCategoryDB;User ID=sa;Password=1111;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                .UseSqlServer("Data Source=LONGNGUYENDH\\SQLEXPRESS;Initial Catalog=BlogDB1;User ID=sa;Password=Asdf@123456;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
     }
 }

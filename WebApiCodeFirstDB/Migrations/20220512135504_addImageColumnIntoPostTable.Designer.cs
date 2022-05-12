@@ -12,8 +12,8 @@ using WebApiCodeFirstDB.Data;
 namespace WebApiCodeFirstDB.Migrations
 {
     [DbContext(typeof(BlogDBContext))]
-    [Migration("20220507124646_CreateDataBase")]
-    partial class CreateDataBase
+    [Migration("20220512135504_addImageColumnIntoPostTable")]
+    partial class addImageColumnIntoPostTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,6 +43,10 @@ namespace WebApiCodeFirstDB.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PostCategoryId")
                         .HasColumnType("int");

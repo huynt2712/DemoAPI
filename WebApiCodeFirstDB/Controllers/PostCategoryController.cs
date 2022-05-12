@@ -6,23 +6,26 @@ namespace WebApiCodeFirstDB.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostCategoryController : Controller
+    public class PostCategoryController : ControllerBase
     {
+        //GET:api/PostCategory
         [HttpGet]
         public IActionResult GetAll()
         {
-            var post = new List<Post>();
-            using (var context = new PostContext())
+            var postCategories = new List<PostCategory>();
+            using (var context = new BlogDBContext())
             {
-                post = context.Posts.ToList();
+                postCategories = context.Categories.ToList();
             }
-            return Ok(post);
+            return Ok(postCategories);
         }
+
+        //GET:api/PostCategory/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             var category = new PostCategory();
-            using (var context = new PostContext())
+            using (var context = new BlogDBContext())
             {
                 category = context.Categories.FirstOrDefault(c => c.Id == id);
             }
@@ -32,6 +35,8 @@ namespace WebApiCodeFirstDB.Controllers
             }
             return Ok(category);
         }
+
+        //POST:api/PostCategory
         [HttpPost]
         public IActionResult Post([FromBody] PostCategory postCategory)
         {
@@ -39,13 +44,15 @@ namespace WebApiCodeFirstDB.Controllers
             {
                 return BadRequest("Post Category is null.");
             }
-            using (var context = new PostContext())
+            using (var context = new BlogDBContext())
             {
                 context.Categories.Add(postCategory);
                 context.SaveChanges();
             }
             return Ok(postCategory.Id);
         }
+
+        //PUT:api/PostCategory/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] PostCategory updateCategory)
         {
@@ -54,7 +61,7 @@ namespace WebApiCodeFirstDB.Controllers
                 return BadRequest("Post Category is null.");
             }
 
-            using (var context = new PostContext())
+            using (var context = new BlogDBContext())
             {
                 var category = context.Categories.FirstOrDefault(c => c.Id == id);
                 if (category == null)
@@ -62,15 +69,18 @@ namespace WebApiCodeFirstDB.Controllers
                     return NotFound("The Post Category record couldn't be found.");
                 }
                 category.Name = updateCategory.Name;
+                category.Slug = updateCategory.Slug;
                 category.UpdateAt = DateTime.UtcNow;
                 context.SaveChanges();
             }
             return Ok();
         }
+
+        // DELETE: api/PostCategory/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            using (var context = new PostContext())
+            using (var context = new BlogDBContext())
             {
                 var category = context.Categories.FirstOrDefault(c => c.Id == id);
                 if (category == null)

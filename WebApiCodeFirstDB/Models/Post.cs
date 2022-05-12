@@ -11,6 +11,11 @@ namespace WebApiCodeFirstDB.Models
         [MaxLength(500)]
         public string Description { get; set; }
         public string Content { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string Slug { get; set; }
+        public string Image { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int PostCategoryId { get; set; }

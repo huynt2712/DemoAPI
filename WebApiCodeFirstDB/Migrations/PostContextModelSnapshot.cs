@@ -10,7 +10,7 @@ using WebApiCodeFirstDB.Data;
 
 namespace WebApiCodeFirstDB.Migrations
 {
-    [DbContext(typeof(PostContext))]
+    [DbContext(typeof(BlogDBContext))]
     partial class PostContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -42,8 +42,17 @@ namespace WebApiCodeFirstDB.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PostCategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -75,6 +84,11 @@ namespace WebApiCodeFirstDB.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
