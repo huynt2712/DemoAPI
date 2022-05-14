@@ -80,26 +80,18 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            //test
             using (var context = new BlogDBContext())
             {
                 var category = context.Categories
                     .FirstOrDefault(c => c.Id == id);
-                //test
-
                 if (category == null)
                 {
-                    //test
                     return NotFound("The Post Category record couldn't be found.");
                 }
                 context.Remove(category);
-                //test
                 context.SaveChanges();
             }
             return Ok();
-            //test
         }
-
-        //test
     }
 }
