@@ -11,7 +11,7 @@ using WebApiCodeFirstDB.Data;
 
 namespace WebApiCodeFirstDB.Migrations
 {
-    [DbContext(typeof(PostContext))]
+    [DbContext(typeof(BlogDBContext))]
     [Migration("20220507124646_CreateDataBase")]
     partial class CreateDataBase
     {

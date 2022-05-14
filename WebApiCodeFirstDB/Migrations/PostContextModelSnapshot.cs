@@ -10,7 +10,7 @@ using WebApiCodeFirstDB.Data;
 
 namespace WebApiCodeFirstDB.Migrations.Post
 {
-    [DbContext(typeof(PostContext))]
+    [DbContext(typeof(BlogDBContext))]
     partial class PostContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

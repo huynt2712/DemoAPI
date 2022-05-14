@@ -12,7 +12,7 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var postCategories = new List<PostCategory>();
+            var post = new List<Post>();
             using (var context = new PostContext())
             {
                 postCategories = context.Categories.ToList();
@@ -25,7 +25,7 @@ namespace WebApiCodeFirstDB.Controllers
         public IActionResult Get(int id)
         {
             var category = new PostCategory();
-            using (var context = new PostContext())
+            using (var context = new BlogDBContext())
             {
                 category = context.Categories.FirstOrDefault(c => c.Id == id);
             }
@@ -44,7 +44,7 @@ namespace WebApiCodeFirstDB.Controllers
             {
                 return BadRequest("Post Category is null.");
             }
-            using (var context = new PostContext())
+            using (var context = new BlogDBContext())
             {
                 context.Categories.Add(postCategory);
                 context.SaveChanges();
@@ -61,7 +61,7 @@ namespace WebApiCodeFirstDB.Controllers
                 return BadRequest("Post Category is null.");
             }
 
-            using (var context = new PostContext())
+            using (var context = new BlogDBContext())
             {
                 var category = context.Categories.FirstOrDefault(c => c.Id == id);
                 if (category == null)
@@ -80,7 +80,7 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            using (var context = new PostContext())
+            using (var context = new BlogDBContext())
             {
                 var category = context.Categories.FirstOrDefault(c => c.Id == id);
                 if (category == null)

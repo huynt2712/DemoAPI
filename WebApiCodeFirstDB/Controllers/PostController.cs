@@ -13,7 +13,6 @@ namespace WebApiCodeFirstDB.Controllers
         public IActionResult GetAll()
         {
             var post = new List<PostViewModel>();
-            using (var context = new PostContext())
             {
                 post = context.Posts.Select(p => new PostViewModel
                 {
@@ -35,7 +34,6 @@ namespace WebApiCodeFirstDB.Controllers
         public IActionResult Get(int id)
         {
             var post = new PostViewModel();
-            using (var context = new PostContext())
             {
                 post = context.Posts
                     .Select(p => new PostViewModel
@@ -64,7 +62,6 @@ namespace WebApiCodeFirstDB.Controllers
             {
                 return BadRequest("Post is null.");
             }
-            using (var context = new PostContext())
             {
                 var  newPost = context.Posts.Add(new Post
                 {
@@ -89,7 +86,6 @@ namespace WebApiCodeFirstDB.Controllers
                 return BadRequest("Post is null.");
             }
 
-            using (var context = new PostContext())
             {
                 var post = context.Posts.FirstOrDefault(c => c.Id == id);
                 if (post == null)
@@ -109,7 +105,6 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            using (var context = new PostContext())
             {
                 var post = context.Posts.FirstOrDefault(c => c.Id == id);
                 if (post == null)
@@ -125,7 +120,6 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpPost("generateData")]
         public IActionResult GenerateData()
         {
-            using (var context = new PostContext())
             {
                 for (var index = 0; index < 5000; index++)
                 {

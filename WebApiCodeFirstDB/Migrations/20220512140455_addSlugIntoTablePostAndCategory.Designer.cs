@@ -11,7 +11,6 @@ using WebApiCodeFirstDB.Data;
 
 namespace WebApiCodeFirstDB.Migrations
 {
-    [DbContext(typeof(PostContext))]
     [Migration("20220512140455_addSlugIntoTablePostAndCategory")]
     partial class addSlugIntoTablePostAndCategory
     {
