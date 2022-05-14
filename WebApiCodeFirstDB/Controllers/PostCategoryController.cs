@@ -82,7 +82,8 @@ namespace WebApiCodeFirstDB.Controllers
         {
             using (var context = new BlogDBContext())
             {
-                var category = context.Categories.FirstOrDefault(c => c.Id == id);
+                var category = context
+                    .Categories.FirstOrDefault(c => c.Id == id);
                 if (category == null)
                 {
                     return NotFound("The Post Category record couldn't be found.");
@@ -92,7 +93,5 @@ namespace WebApiCodeFirstDB.Controllers
             }
             return Ok();
         }
-
-        //test
     }
 }
