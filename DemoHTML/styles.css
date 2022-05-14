@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 header {
   border-bottom: 3px solid #f2f2f2;
 }
@@ -22,7 +28,7 @@ ol {
 
 .postListContent {
   margin: 30px auto;
-  width: 500px;
+  width: 600px;
 }
 
 .list-button {
@@ -31,12 +37,12 @@ ol {
   margin: 10px auto;
 }
 
+/* post */
 #posts {
   padding: 0px;
 }
 
 #posts li {
-  margin-bottom: 5px;
   cursor: pointer;
 }
 
@@ -44,14 +50,58 @@ ol {
   position: relative;
   padding-left: 167px;
   min-height: 141px;
+  display: flex;
+}
+
+.post-container {
+  width: 328px;
 }
 
 .post img {
   position: absolute;
   top: 0;
   left: 0;
+  max-width: 154px;
+  min-height: 150px;
 }
 
 .post p {
   text-align: justify;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.post-action {
+  margin: auto;
+}
+
+.btn {
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.post-title {
+  color: #69c5c0;
+}
+
+/* pagination */
+.pagination {
+  text-align: center;
+  margin-top: 60px;
+}
+.pagination a {
+  margin: -2px;
+  color: #69c5c0;
+  padding: 8px 12px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  border: 1px solid #69c5c0;
+}
+.pagination a.active {
+  background-color: #69c5c0;
+  color: white;
+}
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
 }

@@ -23,14 +23,36 @@
       <!-- <form name="form">
       <input type="text" name="filter" />
     </form> -->
-      <ul id="posts"></ul>
+      <ul id="posts">
+        <template id="postTemplate">
+          <li class="post">
+            <div class="post-container">
+              <img src="" alt="" class="post-image" />
+              <p class="post-title">Title</p>
+              <p class="post-content">Content</p>
+            </div>
+            <div class="post-action">
+              <button class="btn" id="btnDelete">Delete</button>
+            </div>
+          </li>
+        </template>
+      </ul>
+      <div class="pagination">
+        <a class="active" href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#">6</a>
+        <a href="#">»</a>
+      </div>
     </div>
+
     <div class="list-button">
       <!-- <button id="btnProducts">Get List Products</button> -->
       <!-- <button id="btnClear">Clear</button> -->
-      <button id="btnFilter">Filter</button>
-      <button id="btnDelete">Delete</button>
-      <button id="btnPost">Post</button>
+      <button class="btn" id="btnFilter">Filter</button>
+      <button class="btn" id="btnPost">Post</button>
     </div>
 
     <script src="./script.js"></script>

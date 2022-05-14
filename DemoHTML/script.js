@@ -1,29 +1,15 @@
 function getPostCategoryList() {
-  const url = "https://localhost:7213/api/PostCategory";
+  const url = "https://localhost:7213/api/Post";
   const ulElement = document.getElementById("posts");
 
   if (ulElement) {
-    ulElement.textContent = "";
     fetch(url)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        let posts = data;
-
-        for (let post of posts) {
-          console.log(post);
-          let liElement = document.createElement("li");
-          var data =
-            '<div class="post">' +
-            `<img src="${post.description}" alt="" style="width:150px;height:140px">` +
-            `<p>${post.title}</p>` +
-            `<p>${post.content}</p>` +
-            "</div>";
-          liElement.innerHTML = data;
-
-          ulElement.appendChild(liElement);
-        }
+        let postLists = data;
+        renderPostList(postLists, "posts");
       })
       .catch(function (error) {
         console.log(error);
@@ -31,79 +17,52 @@ function getPostCategoryList() {
   }
 }
 
-// function getFilterProductList(searchFilter) {
-//   let url = `https://localhost:7144/posts/filter/${searchFilter}`;
-//   console.log(url);
-//   const ulElement = document.getElementById("products");
+function createPostElement(post) {
+  if (!post) return null;
 
-//   if (ulElement) {
-//     ulElement.textContent = "";
-//     fetch(url)
-//       .then((response) => {
-//         return response.json();
-//       })
-//       .then((data) => {
-//         let products = data;
+  const postTemplate = document.getElementById("postTemplate");
+  if (!postTemplate) return;
 
-//         for (let product of products) {
-//           console.log(product);
-//           let liElement = document.createElement("li");
-//           liElement.innerHTML = product.name + " - " + product.description;
+  const postElement = postTemplate.content.firstElementChild.cloneNode(true);
+  console.log(postElement);
+  postElement.dataset.id = post.id;
 
-//           ulElement.appendChild(liElement);
-//         }
-//       })
-//       .catch(function (error) {
-//         console.log(error);
-//       });
-//   }
-// }
+  const imageElement = postElement.querySelector(".post-image");
+  if (imageElement) imageElement.src = post.image;
+  console.log(imageElement);
 
-// function DeletePost(deletePost) {
-//   const url = `https://localhost:7213/api/PostCategory/${deletePost}`;
-//   const ulElement = document.getElementById("products");
+  const titleElement = postElement.querySelector(".post-title");
+  if (titleElement) titleElement.textContent = post.title;
 
-//   if (ulElement) {
-//     ulElement.textContent = "";
-//     fetch(url)
-//       .then((response) => {
-//         return response.json();
-//       })
-//       .then((data) => {
-//         let products = data;
+  const contentElement = postElement.querySelector(".post-content");
+  if (contentElement) contentElement.textContent = post.content;
 
-//         for (let product of products) {
-//           console.log(product);
-//           let liElement = document.createElement("li");
-//           liElement.innerHTML = product.name;
+  return postElement;
+}
 
-//           ulElement.appendChild(liElement);
-//         }
-//       })
-//       .catch(function (error) {
-//         console.log(error);
-//       });
-//   }
-// }
+function renderPostList(postList, ulElementId) {
+  if (!Array.isArray(postList) || postList.length === 0) return;
+  console.log(postList);
+  console.log(ulElementId);
 
-// document.getElementById("btnFilter").addEventListener("click", function () {
-//   let filterProduct = document.form.filter.value;
-//   getFilterProductList(filterProduct);
-// });
+  //find ul element
+  //loop categoryList
+  //each category => create li element => append li into ul
+  const ulElement = document.getElementById(ulElementId);
+  if (!ulElement) return;
 
-// document.getElementById("btnProducts").addEventListener("click", function () {
-//   getPostCategoryList();
-// });
+  for (const post of postList) {
+    console.log(post);
+    const liElement = createPostElement(post);
+    ulElement.appendChild(liElement);
+  }
+}
 
 getPostCategoryList();
-// document.getElementById("btnDelete").addEventListener("click", function () {
-//   let Post = document.form.filter.value.toString();
-//   DeletePost(Post);
-// });
 
-document.getElementById("btnClear").addEventListener("click", function () {
-  const ulElement = document.getElementById("posts");
-  if (ulElement) {
-    ulElement.textContent = "";
-  }
-});
+// document.getElementById("btnClear").addEventListener("click", function () {
+//   const ulElement = document.getElementById("posts");
+//   if (ulElement) {
+//     ulElement.textContent = "";
+//   }
+// });
