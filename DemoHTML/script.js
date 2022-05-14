@@ -8,21 +8,8 @@ function getPostCategoryList() {
         return response.json();
       })
       .then((data) => {
-        let posts = data;
-
-        for (let post of posts) {
-          console.log(post);
-          let liElement = document.createElement("li");
-          var data =
-            '<div class="post">' +
-            `<img src="${post.description}" alt="" style="width:150px;height:140px">` +
-            `<p>${post.title}</p>` +
-            `<p>${post.content}</p>` +
-            "</div>";
-          liElement.innerHTML = data;
-
-          ulElement.appendChild(liElement);
-        }
+        let postLists = data;
+        renderPostList(postLists, "posts");
       })
       .catch(function (error) {
         console.log(error);

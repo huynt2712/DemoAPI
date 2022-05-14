@@ -12,8 +12,8 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var post = new List<Post>();
-            using (var context = new PostContext())
+            var postCategories = new List<PostCategory>();
+            using (var context = new BlogDBContext())
             {
                 postCategories = context.Categories.ToList();
             }

@@ -11,7 +11,7 @@ using WebApiCodeFirstDB.Data;
 
 namespace WebApiCodeFirstDB.Migrations.Post
 {
-    [DbContext(typeof(PostContext))]
+    [DbContext(typeof(BlogDBContext))]
     [Migration("20220514060640_UpdateDatabase")]
     partial class UpdateDatabase
     {
