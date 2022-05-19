@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApiCodeFirstDB.Data;
 using WebApiCodeFirstDB.Models;
+using WebApiCodeFirstDB.Services.Interface;
 
 namespace WebApiCodeFirstDB.Controllers
 {
@@ -8,15 +9,18 @@ namespace WebApiCodeFirstDB.Controllers
     [ApiController]
     public class PostCategoryController : ControllerBase
     {
+        private ICategoryService _categoryService;
+
+        public PostCategoryController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
+
         //GET:api/PostCategory
         [HttpGet]
         public IActionResult GetAll()
         {
-            var postCategories = new List<PostCategory>();
-            using (var context = new BlogDBContext())
-            {
-                postCategories = context.Categories.ToList();
-            }
+            var postCategories = _categoryService.GetAllCategory();
             return Ok(postCategories);
         }
 
@@ -24,11 +28,7 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var category = new PostCategory();
-            using (var context = new BlogDBContext())
-            {
-                category = context.Categories.FirstOrDefault(c => c.Id == id);
-            }
+            var category = _categoryService.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound("The Post Category record couldn't be found.");
@@ -44,11 +44,7 @@ namespace WebApiCodeFirstDB.Controllers
             {
                 return BadRequest("Post Category is null.");
             }
-            using (var context = new BlogDBContext())
-            {
-                context.Categories.Add(postCategory);
-                context.SaveChanges();
-            }
+            var category = _categoryService.AddCagtegory(postCategory);
             return Ok(postCategory.Id);
         }
 
@@ -61,17 +57,10 @@ namespace WebApiCodeFirstDB.Controllers
                 return BadRequest("Post Category is null.");
             }
 
-            using (var context = new BlogDBContext())
+            var categroyId = _categoryService.UpdateCategory(id, updateCategory);
+            if (categroyId == 0)
             {
-                var category = context.Categories.FirstOrDefault(c => c.Id == id);
-                if (category == null)
-                {
-                    return NotFound("The Post Category record couldn't be found.");
-                }
-                category.Name = updateCategory.Name;
-                category.Slug = updateCategory.Slug;
-                category.UpdateAt = DateTime.UtcNow;
-                context.SaveChanges();
+                return NotFound("The Post Category record couldn't be found.");
             }
             return Ok();
         }
@@ -80,15 +69,10 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            using (var context = new BlogDBContext())
+            var categroyId = _categoryService.DeleteCategory(id);
+            if (categroyId == 0)
             {
-                var category = context.Categories.FirstOrDefault(c => c.Id == id);
-                if (category == null)
-                {
-                    return NotFound("The Post Category record couldn't be found.");
-                }
-                context.Remove(category);
-                context.SaveChanges();
+                return NotFound("The Post Category record couldn't be found.");
             }
             return Ok();
         }
