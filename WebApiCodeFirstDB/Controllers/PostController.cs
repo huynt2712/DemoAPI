@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApiCodeFirstDB.Data;
 using WebApiCodeFirstDB.Models;
+using WebApiCodeFirstDB.Services.Interface;
 using WebApiCodeFirstDB.ViewModel;
 
 namespace WebApiCodeFirstDB.Controllers
@@ -9,23 +10,16 @@ namespace WebApiCodeFirstDB.Controllers
     [ApiController]
     public class PostController : Controller
     {
+        private IPostService _postService;
+        public PostController (IPostService postService)
+        {
+            _postService = postService;
+        }
         [HttpGet]
         public IActionResult GetAll()
         {
             //Logic code
-            var post = new List<PostViewModel>();
-            using (var context = new BlogDBContext())
-            {
-                post = context.Posts.Select(p => new PostViewModel
-                {
-                    Id = p.Id,
-                    Content = p.Content,
-                    CreatedDate = p.CreatedDate,
-                    Description = p.Description,
-                    Title = p.Title,
-                    Image = p.Image
-                }).ToList();
-            }
+            var post = _postService.GetAllPost();
             //using: code dispose after {}
             //connect db var context = new BlogDBContext(); connection to database
             //connection to database => slow
@@ -36,21 +30,7 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var post = new PostViewModel();
-            using (var context = new BlogDBContext())
-            {
-                post = context.Posts
-                    .Select(p => new PostViewModel
-                    {
-                        Id = p.Id,
-                        Content = p.Content,
-                        CreatedDate = p.CreatedDate,
-                        Description = p.Description,
-                        Title = p.Title,
-                        Image = p.Image
-                    })
-                    .FirstOrDefault(c => c.Id == id);
-            }
+            var post = _postService.GetPostById(id);
             if (post == null)
             {
                 return NotFound("The Post record couldn't be found.");
@@ -66,20 +46,8 @@ namespace WebApiCodeFirstDB.Controllers
             {
                 return BadRequest("Post is null.");
             }
-            using (var context = new BlogDBContext())
-            {
-                var newPost = context.Posts.Add(new Post
-                {
-                    Content = post.Content,
-                    Title = post.Title,
-                    Description = post.Description,
-                    PostCategoryId = post.PostCategoryId,
-                    Image = post.Image,
-                    CreatedDate = DateTime.UtcNow
-                });
-                context.SaveChanges();
-                return Ok(newPost?.Entity?.Id);
-            }
+            var newPost = _postService.AddPost(post);
+            return Ok();
         }
 
         ////PUT:api/Post/5
@@ -91,54 +59,20 @@ namespace WebApiCodeFirstDB.Controllers
                 return BadRequest("Post is null.");
             }
 
-            using (var context = new BlogDBContext())
+            var post = _postService.UpdatePost(id,updatePost);
+           if (post == 0)
             {
-                var post = context.Posts.FirstOrDefault(c => c.Id == id);
-                if (post == null)
-                {
-                    return NotFound("The Post record couldn't be found.");
-                }
-                post.Title = updatePost.Title;
-                post.Description = updatePost.Description;
-                post.Content = updatePost.Content;
-                post.PostCategoryId = updatePost.PostCategoryId;
-                post.Image = updatePost.Image;
-                post.UpdatedDate = DateTime.UtcNow;
-                context.SaveChanges();
+                return NotFound("The Post record couldn't be found.");
             }
             return Ok();
         }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            using (var context = new BlogDBContext())
+            var post = _postService.DeletePost(id);
+            if (post == 0)
             {
-                var post = context.Posts.FirstOrDefault(c => c.Id == id);
-                if (post == null)
-                {
-                    return NotFound("The Post record couldn't be found.");
-                }
-                context.Remove(post);
-                context.SaveChanges();
-            }
-            return Ok();
-        }
-
-        [HttpPost("generateData")]
-        public IActionResult GenerateData()
-        {
-            using (var context = new BlogDBContext())
-            {
-                for (var index = 0; index < 5000; index++)
-                {
-                    var postCategory = new PostCategory
-                    {
-                        Name = $"Name {index}",
-                        CreateAt = DateTime.UtcNow
-                    };
-                    context.Categories.Add(postCategory);
-                }
-                context.SaveChanges();
+                return NotFound("The Post Category record couldn't be found.");
             }
             return Ok();
         }

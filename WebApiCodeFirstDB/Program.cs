@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddSingleton<IEmailService, EmailService>(); //declaration
 //builder.Services.AddScoped<IEmailService, EmailService>(); //declaration
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 
 var app = builder.Build();
