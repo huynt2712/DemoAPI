@@ -1,5 +1,5 @@
-using WebApiCodeFirstDB.Services;
-using WebApiCodeFirstDB.Services.Interface;
+using DependenceInjection.Services;
+using DependenceInjection.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,13 +9,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-//builder.Services.AddTransient<IEmailService, EmailService>(); //declaration
-//builder.Services.AddTransient<IEmailService, EmailNewService>(); //declaration
-//builder.Services.AddSingleton<IEmailService, EmailService>(); //declaration
-//builder.Services.AddScoped<IEmailService, EmailService>(); //declaration
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-
+builder.Services.AddSingleton<ISingletonService, SingletonService>(); //single create only one
+builder.Services.AddTransient<ITransientService, TransientService>(); //trasient always create new instance
+builder.Services.AddScoped<IScopedService, ScopeService>(); //scope in 1 request
 
 var app = builder.Build();
 
@@ -31,7 +27,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseCors(c => c.AllowAnyOrigin());
 
 app.Run();

@@ -12,6 +12,7 @@ namespace WebApiCodeFirstDB.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
+            //Logic code
             var post = new List<PostViewModel>();
             using (var context = new BlogDBContext())
             {
@@ -29,6 +30,7 @@ namespace WebApiCodeFirstDB.Controllers
             //connect db var context = new BlogDBContext(); connection to database
             //connection to database => slow
 
+            //Controller
             return Ok(post);
         }
         [HttpGet("{id}")]
