@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using WebApiCodeFirstDB.Configuration;
 using WebApiCodeFirstDB.Models;
 using WebApiCodeFirstDB.Services;
@@ -10,37 +11,39 @@ namespace WebApiCodeFirstDB.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly IConfiguration Configuration;
+        //private readonly IConfiguration Configuration;
 
-        public TestController(IConfiguration configuration)
+        //public TestController(IConfiguration configuration)
+        //{
+        //    Configuration = configuration;
+        //}
+
+        private readonly PositionOptions _options;
+
+        public TestController(IOptions<PositionOptions> options)
         {
-            Configuration = configuration;
+            _options = options.Value;
         }
+
 
         [HttpGet]
         public IActionResult Test()
         {
-            //return Content("This is content string....");
-            //var value = new PostCategory
-            //{
-            //    Name = "test json"
-            //};
-            //return new JsonResult(value);
-
+            return Content($"Title: {_options.Title} \n" +
+                      $"Name: {_options.Name}");
             //var myKeyValue = Configuration["MyKey"];
             //var title = Configuration["Position:Title"];
+            //var name = Configuration["Position:Name"];
+            //var defaultLogLevel = Configuration["Logging:LogLevel:Default"];
 
 
             //return Content($"MyKey value: {myKeyValue} \n" +
-            //               $"Title: {title} \n");
+            //               $"Title: {title} \n" +
+            //               $"Name: {name} \n" +
+            //               $"Default Log Level: {defaultLogLevel}");
 
-            var positionOptions = new PositionOptions();
-            Configuration.GetSection(PositionOptions.Position).Bind(positionOptions);
 
-            return Content($"Title: {positionOptions.Title} \n" +
-                           $"Name: {positionOptions.Name}");
 
-            //https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0
         }
 
         [HttpGet("TestSendMail")]

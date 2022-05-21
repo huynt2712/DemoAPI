@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "WebApiCodeFirstDB-dev": {
+    "development": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
