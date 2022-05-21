@@ -1,6 +1,6 @@
-﻿using WebApiCodeFirstDB.Models;
+﻿using BlogApi.Models;
 
-namespace WebApiCodeFirstDB.Services.Interface
+namespace BlogApi.Services.Interface
 {
     //logic
     public interface ICategoryService

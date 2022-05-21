@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApiCodeFirstDB.Data;
+using BlogApi.Data;
 
 #nullable disable
 
-namespace WebApiCodeFirstDB.Migrations
+namespace BlogApi.Migrations
 {
     [Migration("20220512135504_addImageColumnIntoPostTable")]
     partial class addImageColumnIntoPostTable

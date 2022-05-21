@@ -1,5 +1,5 @@
-using WebApiCodeFirstDB.Services;
-using WebApiCodeFirstDB.Services.Interface;
+using BlogApi.Services;
+using BlogApi.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 

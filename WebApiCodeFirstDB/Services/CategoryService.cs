@@ -1,8 +1,8 @@
-﻿using WebApiCodeFirstDB.Data;
-using WebApiCodeFirstDB.Models;
-using WebApiCodeFirstDB.Services.Interface;
+﻿using BlogApi.Data;
+using BlogApi.Models;
+using BlogApi.Services.Interface;
 
-namespace WebApiCodeFirstDB.Services
+namespace BlogApi.Services
 {
     //Logic related category
     public class CategoryService : ICategoryService

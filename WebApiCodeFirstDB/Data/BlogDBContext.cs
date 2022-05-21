@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using WebApiCodeFirstDB.Models;
+using BlogApi.Models;
 
-namespace WebApiCodeFirstDB.Data
+namespace BlogApi.Data
 {
     public class BlogDBContext : DbContext
     {

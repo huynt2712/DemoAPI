@@ -1,4 +1,4 @@
-﻿namespace WebApiCodeFirstDB.ViewModel
+﻿namespace BlogApi.ViewModel
 {
     public class UpdatePostViewModel
     {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace WebApiCodeFirstDB.Migrations
+namespace BlogApi.Migrations
 {
     public partial class addImageColumnIntoPostTable : Migration
     {

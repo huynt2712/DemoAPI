@@ -1,9 +1,9 @@
-﻿using WebApiCodeFirstDB.Data;
-using WebApiCodeFirstDB.Models;
-using WebApiCodeFirstDB.Services.Interface;
-using WebApiCodeFirstDB.ViewModel;
+﻿using BlogApi.Data;
+using BlogApi.Models;
+using BlogApi.Services.Interface;
+using BlogApi.ViewModel;
 
-namespace WebApiCodeFirstDB.Services
+namespace BlogApi.Services
 {
     //Logic related post
     public class PostService : IPostService

@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApiCodeFirstDB.Data;
+using BlogApi.Data;
 
 #nullable disable
 
-namespace WebApiCodeFirstDB.Migrations.Post
+namespace BlogApi.Migrations.Post
 {
     [DbContext(typeof(BlogDBContext))]
     partial class PostContextModelSnapshot : ModelSnapshot
