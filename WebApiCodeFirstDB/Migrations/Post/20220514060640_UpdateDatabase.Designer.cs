@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApiCodeFirstDB.Data;
+using BlogWebApi.Data;
 
 #nullable disable
 
-namespace WebApiCodeFirstDB.Migrations.Post
+namespace BlogWebApi.Migrations.Post
 {
     [DbContext(typeof(BlogDBContext))]
     [Migration("20220514060640_UpdateDatabase")]

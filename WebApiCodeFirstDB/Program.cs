@@ -1,5 +1,8 @@
-using WebApiCodeFirstDB.Services;
-using WebApiCodeFirstDB.Services.Interface;
+using Microsoft.EntityFrameworkCore;
+using BlogWebApi.Configuration;
+using BlogWebApi.Data;
+using BlogWebApi.Services;
+using BlogWebApi.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +19,21 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<IEmailService, EmailService>(); //declaration
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
+//declare DI
+builder.Services.Configure<Course>(
+    builder.Configuration.GetSection("Course"));
+
+builder.Services.AddDbContext<BlogDBContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("BlogDbConnection")));
+
+//
+//builder.Configuration.GetSection("ConnectionStrings:BlogDbConnection").Value)
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment?.EnvironmentName == "Development_Long")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -32,7 +44,18 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-app.UseCors(c => c.AllowAnyOrigin());
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://127.0.0.1:5500/",
+                                              "http://127.0.0.1:5501/");
+                      });
+});
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.Run();

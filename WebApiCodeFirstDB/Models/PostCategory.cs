@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApiCodeFirstDB.Models
+namespace BlogWebApi.Models
 {
     public class PostCategory
     {

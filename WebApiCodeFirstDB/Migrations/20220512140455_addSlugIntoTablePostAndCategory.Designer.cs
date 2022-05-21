@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApiCodeFirstDB.Data;
+using BlogWebApi.Data;
 
 #nullable disable
 
-namespace WebApiCodeFirstDB.Migrations
+namespace BlogWebApi.Migrations
 {
     [Migration("20220512140455_addSlugIntoTablePostAndCategory")]
     partial class addSlugIntoTablePostAndCategory

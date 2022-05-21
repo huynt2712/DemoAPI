@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApiCodeFirstDB.Data;
-using WebApiCodeFirstDB.Models;
-using WebApiCodeFirstDB.Services.Interface;
+using BlogWebApi.Data;
+using BlogWebApi.Models;
+using BlogWebApi.Services.Interface;
 
-namespace WebApiCodeFirstDB.Controllers
+namespace BlogWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace WebApiCodeFirstDB.Migrations
+namespace BlogWebApi.Migrations
 {
     public partial class CreateDataBase : Migration
     {

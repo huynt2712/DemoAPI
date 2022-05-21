@@ -1,13 +1,35 @@
-﻿using WebApiCodeFirstDB.Data;
-using WebApiCodeFirstDB.Models;
-using WebApiCodeFirstDB.Services.Interface;
-using WebApiCodeFirstDB.ViewModel;
+﻿using BlogWebApi.Data;
+using BlogWebApi.Models;
+using BlogWebApi.Services.Interface;
+using BlogWebApi.ViewModel;
 
-namespace WebApiCodeFirstDB.Services
+namespace BlogWebApi.Services
 {
     //Logic related post
     public class PostService : IPostService
     {
+        private readonly BlogDBContext _blogDBContext;
+
+        public PostService(BlogDBContext blogDBContext)
+        {
+            _blogDBContext = blogDBContext;
+        }
+
+        public List<PostViewModel> GetAllPost()
+        {
+            var post = new List<PostViewModel>();
+            post = _blogDBContext.Posts.Select(p => new PostViewModel
+            {
+                Id = p.Id,
+                Content = p.Content,
+                CreatedDate = p.CreatedDate,
+                Description = p.Description,
+                Title = p.Title,
+                Image = p.Image
+            }).ToList();
+            return post;
+        }
+
         public int AddPost(AddPostViewModel addPostViewModel)
         {
             using (var context = new BlogDBContext())
@@ -40,24 +62,6 @@ namespace WebApiCodeFirstDB.Services
                 context.SaveChanges();
                 return post.Id;
             }
-        }
-
-        public List<PostViewModel> GetAllPost()
-        {
-            var post = new List<PostViewModel>();
-            using(var context = new BlogDBContext())
-            {
-                post = context.Posts.Select(p => new PostViewModel
-                {
-                    Id = p.Id,
-                    Content = p.Content,
-                    CreatedDate = p.CreatedDate,
-                    Description = p.Description,
-                    Title = p.Title,
-                    Image = p.Image
-                }).ToList();
-            }
-            return post;
         }
 
         public PostViewModel? GetPostById(int id)

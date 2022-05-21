@@ -1,4 +1,4 @@
-namespace WebApiCodeFirstDB
+namespace BlogWebApi
 {
     public class WeatherForecast
     {

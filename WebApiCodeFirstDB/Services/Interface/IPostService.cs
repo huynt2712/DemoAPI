@@ -1,6 +1,6 @@
-﻿using WebApiCodeFirstDB.ViewModel;
+﻿using BlogWebApi.ViewModel;
 
-namespace WebApiCodeFirstDB.Services.Interface
+namespace BlogWebApi.Services.Interface
 {
     public interface IPostService
     {

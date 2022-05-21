@@ -1,4 +1,4 @@
-﻿namespace WebApiCodeFirstDB.Services
+﻿namespace BlogWebApi.Services
 {
     public interface IEmailService
     {

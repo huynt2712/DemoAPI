@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WebApiCodeFirstDB.Controllers
+namespace BlogWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

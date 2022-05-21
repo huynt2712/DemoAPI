@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace WebApiCodeFirstDB.Migrations
+namespace BlogWebApi.Migrations
 {
     public partial class addSlugIntoTablePostAndCategory : Migration
     {
