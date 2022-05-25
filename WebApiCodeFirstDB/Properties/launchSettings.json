@@ -29,6 +29,16 @@
         "ASPNETCORE_ENVIRONMENT": "Development_Long"
       }
     },
+    "Development_Huy": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7213;http://localhost:5213",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development_Huy"
+      }
+    },
     "Staging": {
       "commandName": "Project",
       "dotnetRunMessages": true,

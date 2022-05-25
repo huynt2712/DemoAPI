@@ -23,7 +23,7 @@ namespace BlogWebApi.Data
             optionsBuilder
                 .UseLazyLoadingProxies()
                 .ConfigureWarnings(w => w.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning));
-                  //.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=BlogDB1;User ID=sa;Password=Asdf@123456");
+            //.UseSqlServer("Server=MSI;Database=PostCategoryDB;Password=1111;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
     }
 }

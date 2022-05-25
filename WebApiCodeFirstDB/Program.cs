@@ -24,26 +24,11 @@ builder.Services.Configure<Course>(
     builder.Configuration.GetSection("Course"));
 
 builder.Services.AddDbContext<BlogDBContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("BlogDbConnection")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //
 //builder.Configuration.GetSection("ConnectionStrings:BlogDbConnection").Value)
 
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment?.EnvironmentName == "Development_Long")
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
@@ -55,6 +40,21 @@ builder.Services.AddCors(options =>
                                               "http://127.0.0.1:5501/");
                       });
 });
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment() || app.Environment?.EnvironmentName == "Development_Huy")
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.UseCors(MyAllowSpecificOrigins);
 
