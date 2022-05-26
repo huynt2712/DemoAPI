@@ -7,14 +7,18 @@ namespace BlogWebApi.Services
     //Logic related category
     public class CategoryService : ICategoryService
     {
+        private readonly BlogDBContext _blogDBContext;
+
+        public CategoryService(BlogDBContext blogDBContext)
+        {
+            _blogDBContext = blogDBContext;
+        }
         //logic
         public List<PostCategory> GetAllCategory()
         {
             var postCategories = new List<PostCategory>();
-            using (var context = new BlogDBContext())
-            {
-                postCategories = context.Categories.ToList();
-            }
+            postCategories = _blogDBContext.Categories.ToList();
+   
 
             return postCategories;
         }
@@ -22,45 +26,35 @@ namespace BlogWebApi.Services
         public PostCategory? GetCategoryById(int id)
         {
             var category = new PostCategory();
-            using (var context = new BlogDBContext())
-            {
-                category = context.Categories.FirstOrDefault(c => c.Id == id);
-            }
+                category = _blogDBContext.Categories.FirstOrDefault(c => c.Id == id);
 
             return category;
         }
 
         public int AddCagtegory(PostCategory postCategory)
         {
-            using (var context = new BlogDBContext())
-            {
-                context.Categories.Add(postCategory);
-                context.SaveChanges();
-            }
+                _blogDBContext.Categories.Add(postCategory);
+                _blogDBContext.SaveChanges();
 
             return postCategory.Id;
         }
 
         public int DeleteCategory(int id)
         {
-            using (var context = new BlogDBContext())
-            {
-                var category = context.Categories.FirstOrDefault(c => c.Id == id);
+
+                var category = _blogDBContext.Categories.FirstOrDefault(c => c.Id == id);
                 if (category == null)
                 {
                     return 0;
                 }
-                context.Remove(category);
-                context.SaveChanges();
+                _blogDBContext.Remove(category);
+                _blogDBContext.SaveChanges();
                 return category.Id;
-            }
         }
 
         public int UpdateCategory(int id, PostCategory updateCategory)
         {
-            using (var context = new BlogDBContext())
-            {
-                var category = context.Categories.FirstOrDefault(c => c.Id == id);
+                var category = _blogDBContext.Categories.FirstOrDefault(c => c.Id == id);
                 if (category == null)
                 {
                     return 0;
@@ -68,9 +62,8 @@ namespace BlogWebApi.Services
                 category.Name = updateCategory.Name;
                 category.Slug = updateCategory.Slug;
                 category.UpdateAt = DateTime.UtcNow;
-                context.SaveChanges();
+                _blogDBContext.SaveChanges();
                 return category.Id;
-            }
         }
     }
 }

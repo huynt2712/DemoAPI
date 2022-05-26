@@ -32,9 +32,8 @@ namespace BlogWebApi.Services
 
         public int AddPost(AddPostViewModel addPostViewModel)
         {
-            using (var context = new BlogDBContext())
-            {
-                var newPost = context.Posts.Add(new Post
+            
+                var newPost = _blogDBContext.Posts.Add(new Post
                 {
                     Content = addPostViewModel.Content,
                     Title = addPostViewModel.Title,
@@ -44,32 +43,28 @@ namespace BlogWebApi.Services
                     Image = addPostViewModel.Image,
                     CreatedDate = DateTime.UtcNow
                 });
-                context.SaveChanges();
+                _blogDBContext.SaveChanges();
                 return 1;
-            }
         }
 
         public int DeletePost(int id)
         {
-            using (var context = new BlogDBContext())
-            {
-                var post = context.Posts.FirstOrDefault(c => c.Id == id);
+            
+                var post = _blogDBContext.Posts.FirstOrDefault(c => c.Id == id);
                 if (post == null)
                 {
                     return 0;
                 }
-                context.Remove(post);
-                context.SaveChanges();
+                _blogDBContext.Remove(post);
+                _blogDBContext.SaveChanges();
                 return post.Id;
-            }
         }
 
         public PostViewModel? GetPostById(int id)
         {
             var post = new PostViewModel();
-            using (var context = new BlogDBContext())
-            {
-                post = context.Posts.Select(p => new PostViewModel
+            
+                post = _blogDBContext.Posts.Select(p => new PostViewModel
                 {
                     Id = p.Id,
                     Content = p.Content,
@@ -79,14 +74,11 @@ namespace BlogWebApi.Services
                     Image = p.Image
                 }).FirstOrDefault(p => p.Id == id);
                 return post;
-            }
         }
 
         public int UpdatePost(int id, UpdatePostViewModel updatePostViewModel)
         {
-            using (var context = new BlogDBContext())
-            {
-                var post = context.Posts.FirstOrDefault(c => c.Id == id);
+                var post = _blogDBContext.Posts.FirstOrDefault(c => c.Id == id);
                 if (post == null)
                 {
                     return 0;
@@ -97,9 +89,8 @@ namespace BlogWebApi.Services
                 post.PostCategoryId = updatePostViewModel.PostCategoryId;
                 post.Image = updatePostViewModel.Image;
                 post.UpdatedDate = DateTime.UtcNow;
-                context.SaveChanges();
+                _blogDBContext.SaveChanges();
                 return post.Id;
-            }
         }
     }
 }
