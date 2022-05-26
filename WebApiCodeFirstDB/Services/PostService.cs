@@ -30,67 +30,78 @@ namespace BlogWebApi.Services
             return post;
         }
 
-        public int AddPost(AddPostViewModel addPostViewModel)
+        public int? AddPost(AddPostViewModel addPostViewModel)
         {
-            
-                var newPost = _blogDBContext.Posts.Add(new Post
-                {
-                    Content = addPostViewModel.Content,
-                    Title = addPostViewModel.Title,
-                    Description = addPostViewModel.Description,
-                    PostCategoryId = addPostViewModel.PostCategoryId,
-                    Slug = addPostViewModel.Slug,
-                    Image = addPostViewModel.Image,
-                    CreatedDate = DateTime.UtcNow
-                });
-                _blogDBContext.SaveChanges();
-                return 1;
+            //Validate parameter of function
+            var category = _blogDBContext.Categories
+                .FirstOrDefault(c => c.Id == addPostViewModel.PostCategoryId);
+            if (category == null)
+                return -1;
+
+            var newPost = _blogDBContext.Posts.Add(new Post
+            {
+                Content = addPostViewModel.Content,
+                Title = addPostViewModel.Title,
+                Description = addPostViewModel.Description,
+                PostCategoryId = addPostViewModel.PostCategoryId,
+                Slug = addPostViewModel.Slug,
+                Image = addPostViewModel.Image,
+                CreatedDate = DateTime.UtcNow
+            });
+            _blogDBContext.SaveChanges();
+            return newPost?.Entity?.Id;
         }
 
         public int DeletePost(int id)
         {
-            
-                var post = _blogDBContext.Posts.FirstOrDefault(c => c.Id == id);
-                if (post == null)
-                {
-                    return 0;
-                }
-                _blogDBContext.Remove(post);
-                _blogDBContext.SaveChanges();
-                return post.Id;
+
+            var post = _blogDBContext.Posts.FirstOrDefault(c => c.Id == id);
+            if (post == null)
+            {
+                return 0;
+            }
+            _blogDBContext.Remove(post);
+            _blogDBContext.SaveChanges();
+            return post.Id;
         }
 
         public PostViewModel? GetPostById(int id)
         {
             var post = new PostViewModel();
-            
-                post = _blogDBContext.Posts.Select(p => new PostViewModel
-                {
-                    Id = p.Id,
-                    Content = p.Content,
-                    CreatedDate = p.CreatedDate,
-                    Description = p.Description,
-                    Title = p.Title,
-                    Image = p.Image
-                }).FirstOrDefault(p => p.Id == id);
-                return post;
+
+            post = _blogDBContext.Posts.Select(p => new PostViewModel
+            {
+                Id = p.Id,
+                Content = p.Content,
+                CreatedDate = p.CreatedDate,
+                Description = p.Description,
+                Title = p.Title,
+                Image = p.Image
+            }).FirstOrDefault(p => p.Id == id);
+            return post;
         }
 
         public int UpdatePost(int id, UpdatePostViewModel updatePostViewModel)
         {
-                var post = _blogDBContext.Posts.FirstOrDefault(c => c.Id == id);
-                if (post == null)
-                {
-                    return 0;
-                }
-                post.Title = updatePostViewModel.Title;
-                post.Description = updatePostViewModel.Description;
-                post.Content = updatePostViewModel.Content;
-                post.PostCategoryId = updatePostViewModel.PostCategoryId;
-                post.Image = updatePostViewModel.Image;
-                post.UpdatedDate = DateTime.UtcNow;
-                _blogDBContext.SaveChanges();
-                return post.Id;
+            var post = _blogDBContext.Posts.FirstOrDefault(c => c.Id == id);
+            if (post == null)
+            {
+                return -1;
+            }
+            //Validate parameter of function
+            var category = _blogDBContext.Categories
+                .FirstOrDefault(c => c.Id == updatePostViewModel.PostCategoryId);
+            if (category == null)
+                return -1;
+
+            post.Title = updatePostViewModel.Title;
+            post.Description = updatePostViewModel.Description;
+            post.Content = updatePostViewModel.Content;
+            post.PostCategoryId = updatePostViewModel.PostCategoryId;
+            post.Image = updatePostViewModel.Image;
+            post.UpdatedDate = DateTime.UtcNow;
+            _blogDBContext.SaveChanges();
+            return post.Id;
         }
     }
 }

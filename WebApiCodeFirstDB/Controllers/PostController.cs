@@ -47,7 +47,7 @@ namespace BlogWebApi.Controllers
                 return BadRequest("Post is null.");
             }
             var newPost = _postService.AddPost(post);
-            return Ok();
+            return Ok(newPost);
         }
 
         ////PUT:api/Post/5
@@ -58,13 +58,8 @@ namespace BlogWebApi.Controllers
             {
                 return BadRequest("Post is null.");
             }
-
-            var post = _postService.UpdatePost(id,updatePost);
-           if (post == 0)
-            {
-                return NotFound("The Post record couldn't be found.");
-            }
-            return Ok();
+            var postId = _postService.UpdatePost(id,updatePost);
+            return Ok(postId);
         }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
@@ -72,7 +67,7 @@ namespace BlogWebApi.Controllers
             var post = _postService.DeletePost(id);
             if (post == 0)
             {
-                return NotFound("The Post Category record couldn't be found.");
+                return NotFound("The Post record couldn't be found.");
             }
             return Ok();
         }

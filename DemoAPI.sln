@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependenceInjection", "Depe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogWebApi", "WebApiCodeFirstDB\BlogWebApi.csproj", "{41A58AB2-AD6C-4FEF-9DF8-A5CBCB637CCD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asynchronous_Synchronous", "Asynchronous_Synchronous\Asynchronous_Synchronous.csproj", "{28F6593E-0FE4-40ED-AE3F-0A84A5B3A25F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{41A58AB2-AD6C-4FEF-9DF8-A5CBCB637CCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41A58AB2-AD6C-4FEF-9DF8-A5CBCB637CCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41A58AB2-AD6C-4FEF-9DF8-A5CBCB637CCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28F6593E-0FE4-40ED-AE3F-0A84A5B3A25F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F6593E-0FE4-40ED-AE3F-0A84A5B3A25F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28F6593E-0FE4-40ED-AE3F-0A84A5B3A25F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28F6593E-0FE4-40ED-AE3F-0A84A5B3A25F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

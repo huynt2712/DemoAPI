@@ -14,6 +14,6 @@ namespace BlogWebApi.Models
         public string Slug { get; set; }
         public DateTime? CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
-        public virtual List<Post> Posts { get; set; }
+        public virtual List<Post>? Posts { get; set; } 
     }
 }

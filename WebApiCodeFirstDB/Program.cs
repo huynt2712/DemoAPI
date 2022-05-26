@@ -3,12 +3,13 @@ using BlogWebApi.Configuration;
 using BlogWebApi.Data;
 using BlogWebApi.Services;
 using BlogWebApi.Services.Interface;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
+    
+builder.Services.AddControllers().AddJsonOptions(options =>
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -24,10 +25,7 @@ builder.Services.Configure<Course>(
     builder.Configuration.GetSection("Course"));
 
 builder.Services.AddDbContext<BlogDBContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-//
-//builder.Configuration.GetSection("ConnectionStrings:BlogDbConnection").Value)
+options.UseSqlServer(builder.Configuration.GetConnectionString("BlogDbConnection")));
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -44,7 +42,9 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment?.EnvironmentName == "Development_Huy")
+if (app.Environment.IsDevelopment() 
+    || app.Environment?.EnvironmentName == "Development_Huy"
+    || app.Environment?.EnvironmentName == "Development_Long")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
