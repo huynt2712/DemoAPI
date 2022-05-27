@@ -6,38 +6,38 @@
 using System.Diagnostics;
 using System.Net;
 
-//var watch = new Stopwatch();
-//watch.Start();
+var watch = new Stopwatch();
+watch.Start();
 
-//ActionOne(); //5s
-//ActionTwo(); //2s
-//ActionThree(); //2s
+ActionOne(); //5s
+ActionTwo(); //2s
+ActionThree(); //2s
 
-////=> 9s
+//=> 9s
 
-//watch.Stop();
-//Console.WriteLine($"Execution time: {watch.ElapsedMilliseconds} ms");
+watch.Stop();
+Console.WriteLine($"Execution time: {watch.ElapsedMilliseconds} ms");
 
-//void ActionOne()
-//{
+void ActionOne()
+{
 
-//    //Download file 
-//    Thread.Sleep(5000); //5s
-//    Console.WriteLine("Action one");
-//}
+    //Download file 
+    Thread.Sleep(5000); //5s
+    Console.WriteLine("Action one");
+}
 
 
-//void ActionTwo()
-//{
-//    Thread.Sleep(100000); //2s
-//    Console.WriteLine("Action two");
-//}
+void ActionTwo()
+{
+    Thread.Sleep(4000); //2s
+    Console.WriteLine("Action two");
+}
 
-//void ActionThree()
-//{
-//    Thread.Sleep(2000); //2s
-//    Console.WriteLine("Action three");
-//}
+void ActionThree()
+{
+    Thread.Sleep(3000); //2s
+    Console.WriteLine("Action three");
+}
 
 
 ////Lập trình đồng bộ 
@@ -58,12 +58,12 @@ string DownloadFileSynchronous(string path)
 }
 //Lập trình bất đồng bộ
 
-var url = "https://github.com/namndwebdev/html-css-js-thuc-chien/blob/main/Counter%20Up/index.html";
-var fileTask = DownloadFileAsynchronous(url);
-Console.WriteLine("Làm gì đó khi file đang tải");
-var file = await fileTask;
-Console.WriteLine($"File có độ dài {file.Length}");
-Console.WriteLine("Làm gì đó khi file tải xong");
+//var url = "https://github.com/namndwebdev/html-css-js-thuc-chien/blob/main/Counter%20Up/index.html";
+//var fileTask = DownloadFileAsynchronous(url);
+//Console.WriteLine("Làm gì đó khi file đang tải");
+//var file = await fileTask;
+//Console.WriteLine($"File có độ dài {file.Length}");
+//Console.WriteLine("Làm gì đó khi file tải xong");
 
 //void task, task<T> 
 async Task<string> DownloadFileAsynchronous(string path)
@@ -78,3 +78,39 @@ async Task<string> DownloadFileAsynchronous(string path)
 //thread
 //thread x chạy DownloadFileAsynchronous
 //thread y Console.WriteLine("Làm gì đó khi file đang tải");
+
+
+
+var watch1 = new Stopwatch();
+watch1.Start();
+
+var action1 = ActionOne1();
+var action2 = ActionTwo1();
+var action3 = ActionThree1();
+
+//=> 9s
+
+watch1.Stop();
+Console.WriteLine($"Execution time: {watch1.ElapsedMilliseconds} ms");
+
+async Task ActionOne1()
+{
+    Console.WriteLine("Action One");
+    await Task.Delay(5000);
+    
+    
+}
+
+async Task ActionTwo1()
+{    
+    Console.WriteLine("Action Two");
+    await Task.Delay(4000);
+}
+
+async Task ActionThree1()
+{
+    Console.WriteLine("Action Three");
+    await Task.Delay(3000);
+    
+
+}
