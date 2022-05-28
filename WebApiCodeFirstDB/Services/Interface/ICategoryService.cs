@@ -2,17 +2,15 @@
 
 namespace BlogWebApi.Services.Interface
 {
-    //logic
     public interface ICategoryService
     {
-        List<PostCategory> GetAllCategory();
+        Task<List<PostCategory>> GetAllCategoryAsync();
+        Task<PostCategory?> GetCategoryByIdAsync(int id);
 
-        PostCategory? GetCategoryById(int id);
+        Task<int> AddCagtegoryAsync(PostCategory postCategory);
 
-        int AddCagtegory(PostCategory postCategory);
+        Task<int> DeleteCategoryAsync(int id);
 
-        int UpdateCategory(int id, PostCategory updateCategory);
-
-        int DeleteCategory(int id);
+        Task<int> UpdateCategoryAsync(int id, PostCategory updateCategory);
     }
 }

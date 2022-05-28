@@ -1,6 +1,7 @@
 ﻿using BlogWebApi.Data;
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogWebApi.Services
 {
@@ -13,57 +14,61 @@ namespace BlogWebApi.Services
         {
             _blogDBContext = blogDBContext;
         }
-        //logic
-        public List<PostCategory> GetAllCategory()
+
+        public async Task<List<PostCategory>> GetAllCategoryAsync()
         {
             var postCategories = new List<PostCategory>();
-            postCategories = _blogDBContext.Categories.ToList();
-   
-
+            postCategories = await _blogDBContext.Categories.ToListAsync();
             return postCategories;
         }
 
-        public PostCategory? GetCategoryById(int id)
-        {
-            var category = new PostCategory();
-                category = _blogDBContext.Categories.FirstOrDefault(c => c.Id == id);
+        //Task => 10 users 10 request GetAllAsync()
+        //Synchronous request 1, request 2,...request 10 
+        //Asyncrhonous request 1, request 2,...request 10
 
+        //task ko đợi nhau. 
+        //Thread 1 Asyncrhonous => swich thread, scheduler thread thread 1
+        public async Task<PostCategory?> GetCategoryByIdAsync(int id)
+        {
+            var category = await _blogDBContext.Categories
+                .FirstOrDefaultAsync(c => c.Id == id);
             return category;
         }
 
-        public int AddCagtegory(PostCategory postCategory)
+        public async Task<int> AddCagtegoryAsync(PostCategory postCategory)
         {
-                _blogDBContext.Categories.Add(postCategory);
-                _blogDBContext.SaveChanges();
-
+            await _blogDBContext.Categories.AddAsync(postCategory);
+            await _blogDBContext.SaveChangesAsync();
             return postCategory.Id;
         }
 
-        public int DeleteCategory(int id)
+        public async Task<int> DeleteCategoryAsync(int id)
         {
 
-                var category = _blogDBContext.Categories.FirstOrDefault(c => c.Id == id);
-                if (category == null)
-                {
-                    return 0;
-                }
-                _blogDBContext.Remove(category);
-                _blogDBContext.SaveChanges();
-                return category.Id;
+            var category = await _blogDBContext.Categories
+                .FirstOrDefaultAsync(c => c.Id == id);
+            if (category == null)
+            {
+                return 0;
+            }
+            _blogDBContext.Remove(category);
+            await _blogDBContext.SaveChangesAsync();
+            return category.Id;
         }
 
-        public int UpdateCategory(int id, PostCategory updateCategory)
+        public async Task<int> UpdateCategoryAsync(int id, PostCategory updateCategory)
         {
-                var category = _blogDBContext.Categories.FirstOrDefault(c => c.Id == id);
-                if (category == null)
-                {
-                    return 0;
-                }
-                category.Name = updateCategory.Name;
-                category.Slug = updateCategory.Slug;
-                category.UpdateAt = DateTime.UtcNow;
-                _blogDBContext.SaveChanges();
-                return category.Id;
+            var category = await _blogDBContext.Categories
+                .FirstOrDefaultAsync(c => c.Id == id);
+            if (category == null)
+            {
+                return 0;
+            }
+            category.Name = updateCategory.Name;
+            category.Slug = updateCategory.Slug;
+            category.UpdateAt = DateTime.UtcNow;
+            await _blogDBContext.SaveChangesAsync();
+            return category.Id;
         }
     }
 }
