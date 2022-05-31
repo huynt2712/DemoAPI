@@ -4,10 +4,10 @@ namespace BlogWebApi.Services.Interface
 {
     public interface IPostService
     {
-        List<PostViewModel> GetAllPost();
-        PostViewModel? GetPostById(int id);
-        int? AddPost(AddPostViewModel addPostViewModel);
-        int UpdatePost(int id, UpdatePostViewModel updatePostViewModel);
-        int DeletePost(int id);
+        Task<List<PostViewModel>> GetAllPostAsync();
+        Task<PostViewModel?> GetPostByIdAsync(int id);
+        Task <int?> AddPostAsync(AddPostViewModel addPostViewModel);
+        Task <int> UpdatePostAsync(int id, UpdatePostViewModel updatePostViewModel);
+        Task <int> DeletePostAsync(int id);
     }
 }

@@ -2,6 +2,7 @@
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogWebApi.Services
 {
@@ -15,10 +16,10 @@ namespace BlogWebApi.Services
             _blogDBContext = blogDBContext;
         }
 
-        public List<PostViewModel> GetAllPost()
+        public async Task <List<PostViewModel>> GetAllPostAsync()
         {
             var post = new List<PostViewModel>();
-            post = _blogDBContext.Posts.Select(p => new PostViewModel
+            post = await _blogDBContext.Posts.Select(p => new PostViewModel
             {
                 Id = p.Id,
                 Content = p.Content,
@@ -26,19 +27,19 @@ namespace BlogWebApi.Services
                 Description = p.Description,
                 Title = p.Title,
                 Image = p.Image
-            }).ToList();
+            }).ToListAsync();
             return post;
         }
 
-        public int? AddPost(AddPostViewModel addPostViewModel)
+        public async Task <int?> AddPostAsync(AddPostViewModel addPostViewModel)
         {
             //Validate parameter of function
-            var category = _blogDBContext.Categories
-                .FirstOrDefault(c => c.Id == addPostViewModel.PostCategoryId);
+            var category = await _blogDBContext.Categories
+                .FirstOrDefaultAsync(c => c.Id == addPostViewModel.PostCategoryId);
             if (category == null)
                 return -1;
 
-            var newPost = _blogDBContext.Posts.Add(new Post
+            var newPost = await _blogDBContext.Posts.AddAsync(new Post
             {
                 Content = addPostViewModel.Content,
                 Title = addPostViewModel.Title,
@@ -48,28 +49,28 @@ namespace BlogWebApi.Services
                 Image = addPostViewModel.Image,
                 CreatedDate = DateTime.UtcNow
             });
-            _blogDBContext.SaveChanges();
+            await _blogDBContext.SaveChangesAsync();
             return newPost?.Entity?.Id;
         }
 
-        public int DeletePost(int id)
+        public async Task <int> DeletePostAsync(int id)
         {
 
-            var post = _blogDBContext.Posts.FirstOrDefault(c => c.Id == id);
+            var post = await _blogDBContext.Posts.FirstOrDefaultAsync(c => c.Id == id);
             if (post == null)
             {
                 return 0;
             }
             _blogDBContext.Remove(post);
-            _blogDBContext.SaveChanges();
+            await _blogDBContext.SaveChangesAsync();
             return post.Id;
         }
 
-        public PostViewModel? GetPostById(int id)
+        public async Task <PostViewModel?> GetPostByIdAsync(int id)
         {
             var post = new PostViewModel();
 
-            post = _blogDBContext.Posts.Select(p => new PostViewModel
+            post = await _blogDBContext.Posts.Select(p => new PostViewModel
             {
                 Id = p.Id,
                 Content = p.Content,
@@ -77,20 +78,20 @@ namespace BlogWebApi.Services
                 Description = p.Description,
                 Title = p.Title,
                 Image = p.Image
-            }).FirstOrDefault(p => p.Id == id);
+            }).FirstOrDefaultAsync(p => p.Id == id);
             return post;
         }
 
-        public int UpdatePost(int id, UpdatePostViewModel updatePostViewModel)
+        public async Task <int> UpdatePostAsync(int id, UpdatePostViewModel updatePostViewModel)
         {
-            var post = _blogDBContext.Posts.FirstOrDefault(c => c.Id == id);
+            var post = await _blogDBContext.Posts.FirstOrDefaultAsync(c => c.Id == id);
             if (post == null)
             {
                 return -1;
             }
             //Validate parameter of function
-            var category = _blogDBContext.Categories
-                .FirstOrDefault(c => c.Id == updatePostViewModel.PostCategoryId);
+            var category = await _blogDBContext.Categories
+                .FirstOrDefaultAsync(c => c.Id == updatePostViewModel.PostCategoryId);
             if (category == null)
                 return -1;
 
@@ -100,7 +101,7 @@ namespace BlogWebApi.Services
             post.PostCategoryId = updatePostViewModel.PostCategoryId;
             post.Image = updatePostViewModel.Image;
             post.UpdatedDate = DateTime.UtcNow;
-            _blogDBContext.SaveChanges();
+            await _blogDBContext.SaveChangesAsync();
             return post.Id;
         }
     }

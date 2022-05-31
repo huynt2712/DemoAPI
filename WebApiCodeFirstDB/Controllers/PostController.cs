@@ -16,10 +16,10 @@ namespace BlogWebApi.Controllers
             _postService = postService;
         }
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task <IActionResult> GetAllAsync()
         {
             //Logic code
-            var post = _postService.GetAllPost();
+            var post = await _postService.GetAllPostAsync();
             //using: code dispose after {}
             //connect db var context = new BlogDBContext(); connection to database
             //connection to database => slow
@@ -28,9 +28,9 @@ namespace BlogWebApi.Controllers
             return Ok(post);
         }
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task <IActionResult> GetAsync(int id)
         {
-            var post = _postService.GetPostById(id);
+            var post = await _postService.GetPostByIdAsync(id);
             if (post == null)
             {
                 return NotFound("The Post record couldn't be found.");
@@ -40,31 +40,31 @@ namespace BlogWebApi.Controllers
 
         //POST:api/Post
         [HttpPost]
-        public IActionResult Post([FromBody] AddPostViewModel post)
+        public async Task <IActionResult> PostAsync([FromBody] AddPostViewModel post)
         {
             if (post == null)
             {
                 return BadRequest("Post is null.");
             }
-            var newPost = _postService.AddPost(post);
+            var newPost = await _postService.AddPostAsync(post);
             return Ok(newPost);
         }
 
         ////PUT:api/Post/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UpdatePostViewModel updatePost)
+        public async Task <IActionResult> PutAsync(int id, [FromBody] UpdatePostViewModel updatePost)
         {
             if (updatePost == null)
             {
                 return BadRequest("Post is null.");
             }
-            var postId = _postService.UpdatePost(id,updatePost);
+            var postId = await _postService.UpdatePostAsync(id,updatePost);
             return Ok(postId);
         }
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task <IActionResult> DeleteAsync(int id)
         {
-            var post = _postService.DeletePost(id);
+            var post = await _postService.DeletePostAsync(id);
             if (post == 0)
             {
                 return NotFound("The Post record couldn't be found.");
