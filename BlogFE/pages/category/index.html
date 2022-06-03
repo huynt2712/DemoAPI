@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>Category CRUD</title>
+</head>
+<body>
+    <!-- Get list category: //GET:api/PostCategory -->
+    <!-- Get category by id: //GET:api/PostCategory/5 -->
+    <!-- Add new category: //POST:api/PostCategory -->
+    <!-- Update category: //PUT:api/PostCategory/5 -->
+    <!-- Delete category: // DELETE: api/PostCategory/5 -->
+
+    <!-- 1. Get list category 
+         2. Add new category
+         3. Update category
+         4. Delete category
+         5. Paging
+         6. Filter/search category
+    -->
+
+    <h1>Category CRUD</h1>
+
+    <form class="w3-container" action="javascript:void(0);" method="POST" onsubmit="addCategory()">
+        <h3>Add</h3>
+        <p>
+            <label><b>Name</b></label>
+            <input class="w3-input w3-border categoryInput" type="text" id="add-name" placeholder="name">
+        </p>
+        <p>
+            <label><b>Slug</b></label>
+            <input class="w3-input w3-border categoryInput" type="text" id="add-slug" placeholder="slug">
+        </p>
+        <input class="w3-button w3-white w3-border w3-round-large" type="submit" value="Add">
+    </form>
+
+    <div class="w3-container">
+        <h3>List category</h3>
+        <div class="w3-responsive">
+            <table class="w3-table-all">
+            <tr>
+              <th>Name</th>
+              <th>Slug</th>
+              <th>Create At</th>
+              <th>Update At</th>
+              <th></th>
+              <th></th>
+            </tr>
+            <tbody id="listCategoryIds"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="editForm">
+        <form class="w3-container" action="javascript:void(0);" method="PUT" onsubmit="updateCategory()">
+            <h3>Edit</h3>
+            <input class="w3-input w3-border categoryInput" id="edit-id" type="hidden">
+            <p>
+                <label><b>Name</b></label>
+                <input class="w3-input w3-border categoryInput" type="text" id="edit-name" placeholder="name">
+            </p>
+            <p>
+                <label><b>Slug</b></label>
+                <input class="w3-input w3-border categoryInput" type="text" id="edit-slug" placeholder="slug">
+            </p>
+            <input class="w3-button w3-white w3-border w3-round-large" type="submit" value="Save">
+            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
+    <br>
+
+    <script src="js/index.js"></script>
+</body>
+</html>

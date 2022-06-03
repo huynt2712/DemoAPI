@@ -1,6 +1,7 @@
 ﻿using BlogWebApi.Data;
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
+using BlogWebApi.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogWebApi.Services
@@ -15,10 +16,19 @@ namespace BlogWebApi.Services
             _blogDBContext = blogDBContext;
         }
 
-        public async Task<List<PostCategory>> GetAllCategoryAsync()
+        public async Task<List<CategoryViewModel>> GetAllCategoryAsync()
         {
-            var postCategories = new List<PostCategory>();
-            postCategories = await _blogDBContext.Categories.ToListAsync();
+            var postCategories = new List<CategoryViewModel>();
+            postCategories = await _blogDBContext.Categories
+                .Select(c => new CategoryViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Slug = c.Slug,
+                    CreateAt = c.CreateAt,
+                    UpdateAt = c.UpdateAt
+                })
+                .ToListAsync();
             return postCategories;
         }
 
@@ -28,18 +38,31 @@ namespace BlogWebApi.Services
 
         //task ko đợi nhau. 
         //Thread 1 Asyncrhonous => swich thread, scheduler thread thread 1
-        public async Task<PostCategory?> GetCategoryByIdAsync(int id)
+        public async Task<CategoryViewModel?> GetCategoryByIdAsync(int id)
         {
             var category = await _blogDBContext.Categories
+                 .Select(c => new CategoryViewModel
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     Slug = c.Slug,
+                     CreateAt = c.CreateAt,
+                     UpdateAt = c.UpdateAt
+                 })
                 .FirstOrDefaultAsync(c => c.Id == id);
             return category;
         }
 
-        public async Task<int> AddCagtegoryAsync(PostCategory postCategory)
+        public async Task<int> AddCagtegoryAsync(AddCategoryViewModel postCategory)
         {
-            await _blogDBContext.Categories.AddAsync(postCategory);
+            var newCategory = await _blogDBContext.Categories.AddAsync(new PostCategory
+            {
+                Name = postCategory.Name,
+                Slug = postCategory.Slug,
+                CreateAt = DateTime.UtcNow //UTC 0 (server)
+            });
             await _blogDBContext.SaveChangesAsync();
-            return postCategory.Id;
+            return newCategory.Entity.Id;
         }
 
         public async Task<int> DeleteCategoryAsync(int id)
@@ -56,7 +79,7 @@ namespace BlogWebApi.Services
             return category.Id;
         }
 
-        public async Task<int> UpdateCategoryAsync(int id, PostCategory updateCategory)
+        public async Task<int> UpdateCategoryAsync(int id, UpdateCategoryViewModel updateCategory)
         {
             var category = await _blogDBContext.Categories
                 .FirstOrDefaultAsync(c => c.Id == id);

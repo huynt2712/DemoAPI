@@ -2,6 +2,7 @@
 using BlogWebApi.Data;
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
+using BlogWebApi.ViewModel;
 
 namespace BlogWebApi.Controllers
 {
@@ -26,7 +27,7 @@ namespace BlogWebApi.Controllers
 
         //GET:api/PostCategory/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
@@ -38,19 +39,19 @@ namespace BlogWebApi.Controllers
 
         //POST:api/PostCategory
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] PostCategory postCategory)
+        public async Task<IActionResult> PostAsync([FromBody] AddCategoryViewModel postCategory)
         {
             if (postCategory == null)
             {
                 return BadRequest("Post Category is null.");
             }
-            var category = await _categoryService.AddCagtegoryAsync(postCategory);
-            return Ok(postCategory.Id);
+            var categoryId = await _categoryService.AddCagtegoryAsync(postCategory);
+            return Ok(categoryId);
         }
 
         //PUT:api/PostCategory/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, [FromBody] PostCategory updateCategory)
+        public async Task<IActionResult> PutAsync(int id, [FromBody] UpdateCategoryViewModel updateCategory)
         {
             if (updateCategory == null)
             {

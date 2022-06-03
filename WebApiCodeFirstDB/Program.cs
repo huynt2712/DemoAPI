@@ -35,7 +35,10 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins("http://127.0.0.1:5500/",
-                                              "http://127.0.0.1:5501/");
+                                              "http://127.0.0.1:5501/")
+                           .SetIsOriginAllowed((host) => true)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod(); //GET/POST/PUT/DELETE
                       });
 });
 
@@ -55,6 +58,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseRouting();
 
 app.UseCors(MyAllowSpecificOrigins);
 
