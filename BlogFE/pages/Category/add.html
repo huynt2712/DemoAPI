@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/category.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Add Category</title>
+</head>
+<body>
+    <h1>Category CRUD</h1>
+    <div class="w3-container">
+        <h3>Add</h3>
+    </div>
+    <form class="w3-container" action="javascript:void(0);" method="POST" onsubmit="addCategory()">
+        <p>
+            <label class="w3-text"><b>Name</b></label>
+            <input class="w3-input w3-border categoryInput" type="text" id="add-name" placeholder="Name">
+        </p>
+        <p>
+            <label class="w3-text"><b>Slug</b></label>
+            <input class="w3-input w3-border categoryInput" type="text" id="add-slug" placeholder="Slug">
+        </p>
+        <input  class="w3-btn w3-white w3-border w3-round-large" type="submit" value="Add">
+    </form>
+</body>
+</html>

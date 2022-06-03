@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="css/category.css">
+    <title>Category</title>
+</head>
+<body>
+    <h1>Category CRUD</h1>
+    <div class="w3-container">
+        <h3>Add</h3>
+    </div>
+    <form class="w3-container" action="javascript:void(0);" method="POST" onsubmit="addCategory()">
+        <p>
+            <label class="w3-text"><b>Name</b></label>
+            <input class="w3-input w3-border categoryInput" type="text" id="add-name" placeholder="Name">
+        </p>
+        <p>
+            <label class="w3-text"><b>Slug</b></label>
+            <input class="w3-input w3-border categoryInput" type="text" id="add-slug" placeholder="Slug">
+        </p>
+        <input  class="w3-btn w3-white w3-border w3-round-large" type="submit" value="Add">
+    </form>
+
+    <div class="w3-container">
+        <h3>List category</h3>
+    </div>
+    <div class="w3-container">
+        <div class="w3-responsive">
+            <table class="w3-table-all">
+            <tr>
+              <th>Name</th>
+              <th>Slug</th>
+              <th>CreateAt</th>
+              <th>UpdateAt</th>
+              <th></th>
+              <th></th>
+            </tr>
+            <tbody id="listCategoryId"></tbody>
+            </table>
+            </div>
+    </div>
+
+    <div id="editForm">
+        <div class="w3-container">
+            <h3>Edit</h3>
+        </div>
+        <form class="w3-container" action="javascript:void(0);" onsubmit="updateCategory()">
+            <input class="w3-input w3-border categoryInput" type="hidden" id="edit-id">
+            <p>
+                <label class="w3-text"><b>Name</b></label>
+                <input class="w3-input w3-border categoryInput" type="text" id="edit-name">
+            </p>
+            <p>
+                <label class="w3-text"><b>Slug</b></label>
+                <input class="w3-input w3-border categoryInput" type="text" id="edit-slug">
+            </p>
+            <input class="w3-btn w3-white w3-border w3-round-large" type="submit" value="Save">
+            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
+
+    <br>
+    <br>
+
+    <script src="js/category.js"></script>
+</body>
+</html>

@@ -29,15 +29,29 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("BlogDbConnection
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(name: MyAllowSpecificOrigins,
+//                      policy =>
+//                      {
+//                          policy.WithOrigins("http://127.0.0.1:5500/",
+//                                              "http://127.0.0.1:5501/")
+//                          .AllowAnyHeader()
+//                          .AllowAnyMethod();
+//                      });
+//});
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("http://127.0.0.1:5500/",
-                                              "http://127.0.0.1:5501/");
-                      });
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin();
+            builder.AllowAnyHeader();
+            builder.AllowAnyMethod();
+        });
 });
+
 
 var app = builder.Build();
 
@@ -56,6 +70,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors("AllowAllOrigins");
 
 app.Run();
