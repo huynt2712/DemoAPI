@@ -5,8 +5,8 @@ function loadCategoryPage(event)
     event.target.classList.add('w3-blue');
     let pageContentElement = document.getElementById('pageContent');
     pageContentElement.innerHTML = '';
-    // $(pageContentElement).load('components/category/index.html');
-    window.location.href = `${window.location.origin}/components/category/index.html`;
+    $(pageContentElement).load('components/category/index.html');
+    // window.location.href = `${window.location.origin}/components/category/index.html`;
 }
 
 
