@@ -1,4 +1,5 @@
 ﻿using BlogWebApi.Data;
+using BlogWebApi.Helper;
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
@@ -16,28 +17,30 @@ namespace BlogWebApi.Services
             _blogDBContext = blogDBContext;
         }
 
-        public async Task<List<CategoryViewModel>> GetAllCategoryAsync()
+        public async Task<PagedList<CategoryViewModel>> GetCategoriesAsync(CategoryRequestModel requestModel)
         {
-            var postCategories = new List<CategoryViewModel>();
-            postCategories = await _blogDBContext.Categories
-                .Select(c => new CategoryViewModel
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Slug = c.Slug,
-                    CreateAt = c.CreateAt,
-                    UpdateAt = c.UpdateAt
-                })
-                .ToListAsync();
-            return postCategories;
+            var categoriesQueryable = _blogDBContext.Categories.OrderBy(c => c.Name).Select(c => new CategoryViewModel
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Slug = c.Slug,
+                CreateAt = c.CreateAt,
+                UpdateAt = c.UpdateAt
+            });
+
+            if(!string.IsNullOrWhiteSpace(requestModel.SearchText))
+            {
+                var searchTextValue = requestModel.SearchText.ToLower();
+                categoriesQueryable = categoriesQueryable
+                    .Where(c => c.Name.ToLower().Contains(searchTextValue)
+                    || c.Slug.ToLower().Contains(searchTextValue));
+            }
+
+            return await PagedList<CategoryViewModel>.ToPagedListAsync(categoriesQueryable, 
+                requestModel.PageNumber,
+                requestModel.PageSize);
         }
 
-        //Task => 10 users 10 request GetAllAsync()
-        //Synchronous request 1, request 2,...request 10 
-        //Asyncrhonous request 1, request 2,...request 10
-
-        //task ko đợi nhau. 
-        //Thread 1 Asyncrhonous => swich thread, scheduler thread thread 1
         public async Task<CategoryViewModel?> GetCategoryByIdAsync(int id)
         {
             var category = await _blogDBContext.Categories

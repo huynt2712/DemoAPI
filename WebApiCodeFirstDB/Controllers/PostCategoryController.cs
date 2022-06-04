@@ -19,9 +19,9 @@ namespace BlogWebApi.Controllers
 
         //GET:api/PostCategory
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery]CategoryRequestModel requestModel)
         {
-            var postCategories = await _categoryService.GetAllCategoryAsync();
+            var postCategories = await _categoryService.GetCategoriesAsync(requestModel);
             return Ok(postCategories);
         }
 

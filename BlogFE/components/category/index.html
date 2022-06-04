@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="css/index.css">
+    <!-- <link rel="stylesheet" href="css/index.css"> -->
+    <link rel="stylesheet" href="components/category/css/index.css">
     <title>Category CRUD</title>
 </head>
 <body>
@@ -23,10 +24,8 @@
          6. Filter/search category
     -->
 
-    <h1>Category CRUD</h1>
-
     <form class="w3-container" action="javascript:void(0);" method="POST" onsubmit="addCategory()">
-        <h3>Add</h3>
+        <!-- <h3>Add</h3> -->
         <p>
             <label><b>Name</b></label>
             <input class="w3-input w3-border categoryInput" type="text" id="add-name" placeholder="name">
@@ -40,6 +39,9 @@
 
     <div class="w3-container">
         <h3>List category</h3>
+        <input class="w3-input w3-border w3-padding" type="text" placeholder="Search for names, slug.." 
+            id="searchCategory" onkeyup="SearchCategory()">
+        <br>
         <div class="w3-responsive">
             <table class="w3-table-all">
             <tr>
@@ -52,6 +54,18 @@
             </tr>
             <tbody id="listCategoryIds"></tbody>
             </table>
+            <br>
+            <div class="w3-center">
+                <div class="w3-bar" id="category_pagination">
+                    <!-- <a href="#" class="w3-bar-item w3-button">&laquo;</a>
+                    <a href="#" class="w3-bar-item w3-button">1</a>
+                    <a href="#" class="w3-bar-item w3-button">2</a>
+                    <a href="#" class="w3-bar-item w3-button">3</a>
+                    <a href="#" class="w3-bar-item w3-button">4</a>
+                    <a href="#" class="w3-bar-item w3-button">&raquo;</a> -->
+                </div>
+            </div>
+            </div>
         </div>
     </div>
 
@@ -73,6 +87,9 @@
     </div>
     <br>
 
-    <script src="js/index.js"></script>
+    <!-- <script src="js/index.js"></script> -->
+    <!-- <script src="/components/category/js/index.js"></script> -->
+    <!-- <script src="/components/category/js/index.js"></script> -->
+
 </body>
 </html>

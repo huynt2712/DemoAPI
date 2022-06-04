@@ -1,11 +1,19 @@
+$(document).ready( $ => {
+
 const url = 'https://localhost:7213/api';
 let listCategory = [];
+let currentPage = 1;
+let pageSize = 5;
 
-function getListCategory()
+function getListCategory(searchValue = '')
 {
-    fetch(`${url}/PostCategory`)
+    fetch(`${url}/PostCategory?SearchText=${searchValue}&PageNumber=${currentPage}&PageSize=${pageSize}`)
         .then(response => response.json()) //=> arrow function
-        .then(data => displayListCategory(data))
+        .then(data => {
+            displayListCategory(data);
+            if(data.totalPages > 0)
+                setUpPagination(data);
+        })
         .catch(error => console.error('Unable to get category list.', error));
 }
 
@@ -14,7 +22,7 @@ function displayListCategory(data)
     const tBody = document.getElementById('listCategoryIds');
     tBody.innerHTML = '';
 
-    data.forEach(category => {
+    data.items.forEach(category => {
         let tr = tBody.insertRow();
         let td1 = tr.insertCell(0);
         let textNode = document.createTextNode(category.name);
@@ -50,8 +58,7 @@ function displayListCategory(data)
         td6.appendChild(deletetButton);
     });
 
-    listCategory = data;
-
+    listCategory = data.items;
 }
 
 function addCategory()
@@ -126,4 +133,55 @@ function updateCategory()
     closeInput();
 }
 
+function paginationCategory(pageNumber)
+{
+    currentPage = pageNumber;
+    getListCategory();
+}
+
+function setUpPagination(data)
+{
+    let categoryPaginationElement = document.getElementById('category_pagination');
+    categoryPaginationElement.innerHTML = '';
+    if(data.hasPrevious)
+    {
+        let itemElement = document.createElement('a');
+        itemElement.classList.add('w3-bar-item', 'w3-button', `pageNumer_${currentPage - 1}`);
+        itemElement.innerHTML = `&laquo;`;
+        itemElement.setAttribute('onclick', `paginationCategory(${currentPage - 1})`);
+        categoryPaginationElement.append(itemElement);
+    }
+
+    for(let pageNumber = 0; pageNumber < data.totalPages; pageNumber++){
+        itemElement = document.createElement('a');
+        itemElement.classList.add('w3-bar-item', 'w3-button', `pageNumer_${pageNumber+1}`);
+        itemElement.innerText = pageNumber + 1;
+        itemElement.setAttribute('onclick', `paginationCategory(${pageNumber + 1})`);
+        categoryPaginationElement.append(itemElement);
+    }
+
+    if(data.hasNext)
+    {
+        itemElement = document.createElement('a');
+        itemElement.classList.add('w3-bar-item', 'w3-button', `pageNumer_${currentPage + 1}`);
+        itemElement.innerHTML = `&raquo;`;
+        itemElement.setAttribute('onclick', `paginationCategory(${currentPage + 1})`);
+        categoryPaginationElement.append(itemElement);
+    }
+
+    let currentPageElement = document.querySelector(`.pageNumer_${currentPage}`);
+    currentPageElement.classList.add('w3-green');
+}
+
+function SearchCategory()
+{
+    let searchElement = document.getElementById("searchCategory");
+    let searchValue = searchElement.value.toLowerCase();
+    getListCategory(searchValue);
+
+}
+
 getListCategory();
+closeInput();
+  
+  });

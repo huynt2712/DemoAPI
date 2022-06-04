@@ -10,14 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
 );
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddTransient<IEmailService, EmailService>(); //declaration
-//builder.Services.AddTransient<IEmailService, EmailNewService>(); //declaration
-//builder.Services.AddSingleton<IEmailService, EmailService>(); //declaration
-//builder.Services.AddScoped<IEmailService, EmailService>(); //declaration
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 //declare DI
@@ -34,9 +29,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://127.0.0.1:5500/",
-                                              "http://127.0.0.1:5501/")
-                           .SetIsOriginAllowed((host) => true)
+                          policy.WithOrigins("http://127.0.0.1:5500",
+                                              "http://127.0.0.1:5501")
                           .AllowAnyHeader()
                           .AllowAnyMethod(); //GET/POST/PUT/DELETE
                       });
