@@ -2,11 +2,11 @@
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
+using BlogWebApi.ViewModel.Category;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogWebApi.Services
 {
-    //Logic related category
     public class CategoryService : ICategoryService
     {
         private readonly BlogDBContext _blogDBContext;
@@ -16,10 +16,9 @@ namespace BlogWebApi.Services
             _blogDBContext = blogDBContext;
         }
 
-        public async Task<List<CategoryViewModel>> GetAllCategoryAsync()
+        public async Task<List<CategoryViewModel>> GetsAsync(CategoryRequestModel requestModel)
         {
-            var postCategories = new List<CategoryViewModel>();
-            postCategories = await _blogDBContext.Categories
+            var postCategories = _blogDBContext.Categories
                 .Select(c => new CategoryViewModel
                 {
                     Id = c.Id,
@@ -27,17 +26,18 @@ namespace BlogWebApi.Services
                     Slug = c.Slug,
                     CreateAt = c.CreateAt,
                     UpdateAt = c.UpdateAt
-                })
-                .ToListAsync();
-            return postCategories;
+                });
+
+            if(!string.IsNullOrWhiteSpace(requestModel.SearchText))
+            {
+                var searchText = requestModel.SearchText.ToLower();
+                postCategories = postCategories.Where(c => (c.Name != null 
+                && c.Name.ToLower().Contains(searchText))
+                || (c.Slug != null && c.Slug.ToLower().Contains(searchText)));
+            }    
+            return await postCategories.ToListAsync();
         }
 
-        //Task => 10 users 10 request GetAllAsync()
-        //Synchronous request 1, request 2,...request 10 
-        //Asyncrhonous request 1, request 2,...request 10
-
-        //task ko đợi nhau. 
-        //Thread 1 Asyncrhonous => swich thread, scheduler thread thread 1
         public async Task<CategoryViewModel?> GetCategoryByIdAsync(int id)
         {
             var category = await _blogDBContext.Categories
@@ -59,7 +59,7 @@ namespace BlogWebApi.Services
             {
                 Name = postCategory.Name,
                 Slug = postCategory.Slug,
-                CreateAt = DateTime.UtcNow //UTC 0 (server)
+                CreateAt = DateTime.UtcNow 
             });
             await _blogDBContext.SaveChangesAsync();
             return newCategory.Entity.Id;

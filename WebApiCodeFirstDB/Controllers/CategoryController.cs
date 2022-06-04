@@ -3,29 +3,28 @@ using BlogWebApi.Data;
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
+using BlogWebApi.ViewModel.Category;
 
 namespace BlogWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostCategoryController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         private ICategoryService _categoryService;
 
-        public PostCategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
 
-        //GET:api/PostCategory
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetsAsync([FromQuery]CategoryRequestModel requestModel)
         {
-            var postCategories = await _categoryService.GetAllCategoryAsync();
+            var postCategories = await _categoryService.GetsAsync(requestModel);
             return Ok(postCategories);
         }
 
-        //GET:api/PostCategory/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
@@ -37,7 +36,6 @@ namespace BlogWebApi.Controllers
             return Ok(category);
         }
 
-        //POST:api/PostCategory
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] AddCategoryViewModel postCategory)
         {
@@ -49,7 +47,6 @@ namespace BlogWebApi.Controllers
             return Ok(categoryId);
         }
 
-        //PUT:api/PostCategory/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(int id, [FromBody] UpdateCategoryViewModel updateCategory)
         {
@@ -66,7 +63,6 @@ namespace BlogWebApi.Controllers
             return Ok();
         }
 
-        // DELETE: api/PostCategory/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

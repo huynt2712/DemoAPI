@@ -14,13 +14,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddTransient<IEmailService, EmailService>(); //declaration
-//builder.Services.AddTransient<IEmailService, EmailNewService>(); //declaration
-//builder.Services.AddSingleton<IEmailService, EmailService>(); //declaration
-//builder.Services.AddScoped<IEmailService, EmailService>(); //declaration
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
-//declare DI
 builder.Services.Configure<Course>(
     builder.Configuration.GetSection("Course"));
 
@@ -34,17 +29,14 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://127.0.0.1:5500/",
-                                              "http://127.0.0.1:5501/")
-                           .SetIsOriginAllowed((host) => true)
+                          policy.WithOrigins("http://127.0.0.1:5500")
                           .AllowAnyHeader()
-                          .AllowAnyMethod(); //GET/POST/PUT/DELETE
+                          .AllowAnyMethod();
                       });
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() 
     || app.Environment?.EnvironmentName == "Development_Huy"
     || app.Environment?.EnvironmentName == "Development_Long")

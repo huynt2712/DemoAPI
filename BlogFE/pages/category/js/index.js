@@ -1,9 +1,9 @@
-const url = 'https://localhost:7213/api';
+const url = 'https://localhost:7213/api/Category';
 let listCategory = [];
 
-function getListCategory()
+function getListCategory(searchText = '')
 {
-    fetch(`${url}/PostCategory`)
+    fetch(`${url}?SearchText=${searchText}`)
         .then(response => response.json()) //=> arrow function
         .then(data => displayListCategory(data))
         .catch(error => console.error('Unable to get category list.', error));
@@ -64,7 +64,7 @@ function addCategory()
         slug: addSlugTextBox.value.trim()
     }
 
-    fetch(`${url}/PostCategory`,{
+    fetch(`${url}`,{
         method: 'POST',
         headers:{
             'Accept': 'application/json',
@@ -83,7 +83,7 @@ function addCategory()
 
 function deleteCategory(categoryId)
 {
-    fetch(`${url}/PostCategory/${categoryId}`,{
+    fetch(`${url}/${categoryId}`,{
         method: 'DELETE'
     })
     .then(() => getListCategory())
@@ -112,7 +112,7 @@ function updateCategory()
         'slug':document.getElementById('edit-slug').value.trim()
     };
 
-    fetch(`${url}/PostCategory/${categoryId}`, {
+    fetch(`${url}/${categoryId}`, {
         method: 'PUT',
         headers:{
             'Accept': 'application/json',
@@ -126,4 +126,40 @@ function updateCategory()
     closeInput();
 }
 
+function activeCategoryTab()
+{
+    let currentActiveElement = document.querySelector('.w3-bar-block .w3-blue');
+    if(currentActiveElement){
+        currentActiveElement.classList.remove('w3-blue');
+        let categorypageElement = document.getElementById('categorypage');
+        if(categorypageElement)
+        categorypageElement.classList.add('w3-blue');
+    }
+}
+
+function searchCategory()
+{
+    let delay = (()=>{
+        let timer = 0;
+        return function(callback, ms){
+          clearTimeout (timer);
+          timer = setTimeout(callback, ms);
+        };
+      })();
+    
+    let searchCategoryElement = document.getElementById('searchCategory');
+    if(searchCategoryElement)
+    {
+        searchCategoryElement.addEventListener('keyup', () => {
+            delay(function(){
+                    let searchCategoryValue = searchCategoryElement.value.toLowerCase();
+                    getListCategory(searchCategoryValue);
+                }, 1000 );
+            });
+    }
+}
+
+activeCategoryTab();
 getListCategory();
+searchCategory();
+closeInput();
