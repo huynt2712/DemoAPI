@@ -1,4 +1,5 @@
-﻿using BlogWebApi.Models;
+﻿using BlogWebApi.Helper;
+using BlogWebApi.Models;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Category;
 
@@ -6,7 +7,7 @@ namespace BlogWebApi.Services.Interface
 {
     public interface ICategoryService
     {
-        Task<List<CategoryViewModel>> GetsAsync(CategoryRequestModel requestModel);
+        Task<PagedList<CategoryViewModel>> GetsAsync(CategoryRequestModel requestModel);
         Task<CategoryViewModel?> GetCategoryByIdAsync(int id);
 
         Task<int> AddCagtegoryAsync(AddCategoryViewModel postCategory);

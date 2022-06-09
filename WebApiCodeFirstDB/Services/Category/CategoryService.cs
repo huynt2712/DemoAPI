@@ -1,4 +1,5 @@
 ﻿using BlogWebApi.Data;
+using BlogWebApi.Helper;
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
@@ -16,7 +17,7 @@ namespace BlogWebApi.Services
             _blogDBContext = blogDBContext;
         }
 
-        public async Task<List<CategoryViewModel>> GetsAsync(CategoryRequestModel requestModel)
+        public async Task<PagedList<CategoryViewModel>> GetsAsync(CategoryRequestModel requestModel)
         {
             var postCategories = _blogDBContext.Categories
                 .Select(c => new CategoryViewModel
@@ -28,14 +29,21 @@ namespace BlogWebApi.Services
                     UpdateAt = c.UpdateAt
                 });
 
+            //Filter
             if(!string.IsNullOrWhiteSpace(requestModel.SearchText))
             {
                 var searchText = requestModel.SearchText.ToLower();
                 postCategories = postCategories.Where(c => (c.Name != null 
                 && c.Name.ToLower().Contains(searchText))
                 || (c.Slug != null && c.Slug.ToLower().Contains(searchText)));
-            }    
-            return await postCategories.ToListAsync();
+            }
+
+            //Paging
+            postCategories = postCategories
+                .OrderByDescending(c => c.Name);
+
+            return await PagedList<CategoryViewModel>.ToPagedListAsync(postCategories,
+                requestModel.PageNumber, requestModel.PageSize);
         }
 
         public async Task<CategoryViewModel?> GetCategoryByIdAsync(int id)

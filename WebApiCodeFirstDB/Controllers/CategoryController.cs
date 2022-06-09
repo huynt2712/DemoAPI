@@ -40,9 +40,14 @@ namespace BlogWebApi.Controllers
         public async Task<IActionResult> PostAsync([FromBody] AddCategoryViewModel postCategory)
         {
             if (postCategory == null)
-            {
-                return BadRequest("Post Category is null.");
-            }
+                return BadRequest("Category can not null");
+
+            if(string.IsNullOrWhiteSpace(postCategory.Name))
+                return BadRequest("Name can not empty");
+
+            if (string.IsNullOrWhiteSpace(postCategory.Slug))
+                return BadRequest("Slug can not empty");
+
             var categoryId = await _categoryService.AddCagtegoryAsync(postCategory);
             return Ok(categoryId);
         }

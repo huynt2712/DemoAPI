@@ -1,11 +1,18 @@
 const url = 'https://localhost:7213/api/Category';
 let listCategory = [];
+let currentPage = 1;
+let pageSize = 5;
 
 function getListCategory(searchText = '')
 {
-    fetch(`${url}?SearchText=${searchText}`)
+    fetch(`${url}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`)
         .then(response => response.json()) //=> arrow function
-        .then(data => displayListCategory(data))
+        .then(data => {
+            displayListCategory(data);
+
+            if(data.totalPages > 0)
+                setupPagintion(data);
+        })
         .catch(error => console.error('Unable to get category list.', error));
 }
 
@@ -14,7 +21,7 @@ function displayListCategory(data)
     const tBody = document.getElementById('listCategoryIds');
     tBody.innerHTML = '';
 
-    data.forEach(category => {
+    data.items.forEach(category => {
         let tr = tBody.insertRow();
         let td1 = tr.insertCell(0);
         let textNode = document.createTextNode(category.name);
@@ -25,11 +32,11 @@ function displayListCategory(data)
         td2.appendChild(textNode);
 
         let td3 = tr.insertCell(2);
-        textNode = document.createTextNode(category.createAt);
+        textNode = document.createTextNode((new Date(category.createAt)).toDateString());
         td3.appendChild(textNode);
 
         let td4 = tr.insertCell(3);
-        textNode = document.createTextNode(category.updateAt);
+        textNode = document.createTextNode(category.updateAt ? '' : (new Date(category.updateAt)).toDateString());
         td4.appendChild(textNode);
 
         const button = document.createElement('button');
@@ -50,7 +57,7 @@ function displayListCategory(data)
         td6.appendChild(deletetButton);
     });
 
-    listCategory = data;
+    listCategory = data.items;
 
 }
 
@@ -58,6 +65,18 @@ function addCategory()
 {
     const addNameTextBox = document.getElementById('add-name');
     const addSlugTextBox = document.getElementById('add-slug');
+
+    if(!addNameTextBox) return;
+    if(!addSlugTextBox) return;
+
+    let name = addNameTextBox.value.trim();
+    if(name === '')
+    {
+        let nameErrorElement = document.getElementById('category_name_error');
+        if(!nameErrorElement) return;
+        nameErrorElement.innerHTML = 'Name can not be empty';
+        return;
+    }
 
     const category = {
         name: addNameTextBox.value.trim(),
@@ -73,7 +92,7 @@ function addCategory()
         body: JSON.stringify(category)
     })
     .then(response => response.json())
-    .then(() => {
+    .then((data) => {
         addNameTextBox.value = '';
         addSlugTextBox.value = '';
         getListCategory();
@@ -157,6 +176,47 @@ function searchCategory()
                 }, 1000 );
             });
     }
+}
+
+function setupPagintion(data){
+    let categoryPaginationElement = document.getElementById('category_pagination');
+    if(!categoryPaginationElement) return;
+
+    categoryPaginationElement.innerHTML = '';
+    if(data.hasPrevious)
+    {
+        let itemElement = document.createElement('a');
+        itemElement.innerHTML = `&laquo;`;
+        itemElement.classList.add('w3-button', `pageNumber_${currentPage - 1}`);
+        itemElement.setAttribute('onclick', `paginationCategory(${currentPage - 1})`);
+        categoryPaginationElement.append(itemElement);
+    }
+
+    for(let pageNumber = 0; pageNumber < data.totalPages; pageNumber++)
+    {
+        itemElement = document.createElement('a');
+        itemElement.classList.add('w3-button', `pageNumber_${pageNumber + 1}`);
+        itemElement.innerHTML = pageNumber + 1;
+        itemElement.setAttribute('onclick', `paginationCategory(${pageNumber + 1})`);
+        categoryPaginationElement.append(itemElement);
+    }
+
+    if(data.hasNext)
+    {
+        let itemElement = document.createElement('a');
+        itemElement.innerHTML = `&raquo;`;
+        itemElement.classList.add('w3-button', `pageNumber_${currentPage + 1}`);
+        itemElement.setAttribute('onclick', `paginationCategory(${currentPage + 1})`);
+        categoryPaginationElement.append(itemElement);
+    }
+
+    let currentPageElement = document.querySelector(`.pageNumber_${currentPage}`);
+    currentPageElement.classList.add('w3-green');
+}
+
+function paginationCategory(pageNumber){
+    currentPage = pageNumber;
+    getListCategory();
 }
 
 activeCategoryTab();

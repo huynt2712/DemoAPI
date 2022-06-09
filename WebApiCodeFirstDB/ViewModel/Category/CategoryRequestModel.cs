@@ -1,7 +1,8 @@
-﻿namespace BlogWebApi.ViewModel.Category
+﻿using BlogWebApi.ViewModel.Common;
+
+namespace BlogWebApi.ViewModel.Category
 {
-    public class CategoryRequestModel
+    public class CategoryRequestModel: QueryStringParameters
     {
-        public string? SearchText { get; set; }
     }
 }
