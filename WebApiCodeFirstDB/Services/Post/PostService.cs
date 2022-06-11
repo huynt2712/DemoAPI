@@ -1,7 +1,9 @@
 ﻿using BlogWebApi.Data;
+using BlogWebApi.Helper;
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
+using BlogWebApi.ViewModel.Post;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogWebApi.Services
@@ -16,10 +18,10 @@ namespace BlogWebApi.Services
             _blogDBContext = blogDBContext;
         }
 
-        public async Task <List<PostViewModel>> GetAllPostAsync()
+        public async Task <PagedList<PostViewModel>> GetAllPostAsync(PostRequestModel postRequestModel)
         {
-            var post = new List<PostViewModel>();
-            post = await _blogDBContext.Posts.Select(p => new PostViewModel
+            var post = _blogDBContext.Posts
+                .Select(p => new PostViewModel
             {
                 Id = p.Id,
                 Content = p.Content,
@@ -27,8 +29,16 @@ namespace BlogWebApi.Services
                 Description = p.Description,
                 Title = p.Title,
                 Image = p.Image
-            }).ToListAsync();
-            return post;
+            });
+            if (!string.IsNullOrEmpty(postRequestModel.SearchText))
+            {
+                var searchTest = postRequestModel.SearchText.ToLower();
+                post =  post.Where(p => p.Content != null && p.Content.ToLower().Contains(searchTest)
+                || p.Description != null && p.Description.ToLower().Contains(searchTest));
+            }
+            post = post.OrderByDescending(p => p.Content);
+            return await PagedList<PostViewModel>.ToPagedListAsync(post,
+                postRequestModel.PageNumber, postRequestModel.PageSize);
         }
 
         public async Task <int?> AddPostAsync(AddPostViewModel addPostViewModel)

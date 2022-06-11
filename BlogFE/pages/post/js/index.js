@@ -1,5 +1,5 @@
-const url = "https://localhost:7213/api/Category";
-let listCategory = [];
+const url = "https://localhost:7213/api/Post";
+let listPost = [];
 let currentPage = 1;
 let pageSize = 5;
 
@@ -20,27 +20,27 @@ function displayListCategory(data) {
   const tBody = document.getElementById("listCategoryIds");
   tBody.innerHTML = "";
 
-  data.items.forEach((category) => {
+  data.items.forEach((post) => {
     let tr = tBody.insertRow();
     let td1 = tr.insertCell(0);
-    let textNode = document.createTextNode(category.name);
+    let textNode = document.createTextNode(post.title);
     td1.appendChild(textNode);
 
     let td2 = tr.insertCell(1);
-    textNode = document.createTextNode(category.slug);
+    textNode = document.createTextNode(post.discription);
     td2.appendChild(textNode);
 
-    let td3 = tr.insertCell(2);
-    textNode = document.createTextNode(
-      new Date(category.createAt).toDateString()
-    );
-    td3.appendChild(textNode);
+    // let td3 = tr.insertCell(2);
+    // textNode = document.createTextNode(
+    //   new Date(category.createAt).toDateString()
+    // );
+    // td3.appendChild(textNode);
 
-    let td4 = tr.insertCell(3);
-    textNode = document.createTextNode(
-      category.updateAt ? "" : new Date(category.updateAt).toDateString()
-    );
-    td4.appendChild(textNode);
+    // let td4 = tr.insertCell(3);
+    // textNode = document.createTextNode(
+    //   category.updateAt ? "" : new Date(category.updateAt).toDateString()
+    // );
+    // td4.appendChild(textNode);
 
     const button = document.createElement("button");
     let editButton = button.cloneNode(false);
@@ -51,10 +51,10 @@ function displayListCategory(data) {
       "w3-border",
       "w3-round-large"
     );
-    editButton.setAttribute("onclick", `displayEditForm(${category.id})`);
+    editButton.setAttribute("onclick", `displayEditForm(${post.id})`);
 
-    let td5 = tr.insertCell(4);
-    td5.appendChild(editButton);
+    let td3 = tr.insertCell(2);
+    td3.appendChild(editButton);
 
     let deletetButton = button.cloneNode(false);
     deletetButton.innerHTML = "Delete";
@@ -64,13 +64,13 @@ function displayListCategory(data) {
       "w3-border",
       "w3-round-large"
     );
-    deletetButton.setAttribute("onclick", `deleteCategory(${category.id})`);
+    deletetButton.setAttribute("onclick", `deleteCategory(${post.id})`);
 
-    let td6 = tr.insertCell(5);
-    td6.appendChild(deletetButton);
+    let td4 = tr.insertCell(3);
+    td4.appendChild(deletetButton);
   });
 
-  listCategory = data.items;
+  listPost = data.items;
 }
 
 function addCategory() {
@@ -80,34 +80,11 @@ function addCategory() {
   if (!addNameTextBox) return;
   if (!addSlugTextBox) return;
 
-  let nameErrorElement = document.getElementById("category_name_error");
-  let slugErrorElement = document.getElementById("category_slug_error");
-  nameErrorElement.innerHTML = "";
-  slugErrorElement.innerHTML = "";
-
   let name = addNameTextBox.value.trim();
   if (name === "") {
+    let nameErrorElement = document.getElementById("category_name_error");
     if (!nameErrorElement) return;
     nameErrorElement.innerHTML = "Name can not be empty";
-    return;
-  }
-  var categoryName = listCategory.find((category) => category.name === name);
-  if (categoryName != null) {
-    if (!nameErrorElement) return;
-    nameErrorElement.innerHTML = "Name is exist, please input name again";
-    return;
-  }
-
-  slug = addSlugTextBox.value.trim();
-  if (slug === "") {
-    if (!slugErrorElement) return;
-    slugErrorElement.innerHTML = "Slug can not be empty";
-    return;
-  }
-  var categorySlug = listCategory.find((category) => category.slug === slug);
-  if (categorySlug != null) {
-    if (!slugErrorElement) return;
-    slugErrorElement.innerHTML = "Slug is exist, please input slug again";
     return;
   }
 
@@ -175,12 +152,12 @@ function updateCategory() {
   closeInput();
 }
 
-function activeCategoryTab() {
+function activePostTab() {
   let currentActiveElement = document.querySelector(".w3-bar-block .w3-blue");
   if (currentActiveElement) {
     currentActiveElement.classList.remove("w3-blue");
-    let categorypageElement = document.getElementById("categorypage");
-    if (categorypageElement) categorypageElement.classList.add("w3-blue");
+    let postpageElement = document.getElementById("postpage");
+    if (postpageElement) postpageElement.classList.add("w3-blue");
   }
 }
 
@@ -253,7 +230,7 @@ function paginationCategory(pageNumber) {
   getListCategory();
 }
 
-activeCategoryTab();
+activePostTab();
 getListCategory();
 searchCategory();
 closeInput();

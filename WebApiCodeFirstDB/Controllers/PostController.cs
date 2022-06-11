@@ -3,6 +3,7 @@ using BlogWebApi.Data;
 using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
+using BlogWebApi.ViewModel.Post;
 
 namespace BlogWebApi.Controllers
 {
@@ -16,10 +17,10 @@ namespace BlogWebApi.Controllers
             _postService = postService;
         }
         [HttpGet]
-        public async Task <IActionResult> GetAllAsync()
+        public async Task <IActionResult> GetAllAsync([FromQuery]PostRequestModel postRequestModel)
         {
             //Logic code
-            var post = await _postService.GetAllPostAsync();
+            var post = await _postService.GetAllPostAsync(postRequestModel);
             //using: code dispose after {}
             //connect db var context = new BlogDBContext(); connection to database
             //connection to database => slow

@@ -1,10 +1,12 @@
-﻿using BlogWebApi.ViewModel;
+﻿using BlogWebApi.Helper;
+using BlogWebApi.ViewModel;
+using BlogWebApi.ViewModel.Post;
 
 namespace BlogWebApi.Services.Interface
 {
     public interface IPostService
     {
-        Task<List<PostViewModel>> GetAllPostAsync();
+        Task<PagedList<PostViewModel>> GetAllPostAsync(PostRequestModel postRequestModel);
         Task<PostViewModel?> GetPostByIdAsync(int id);
         Task <int?> AddPostAsync(AddPostViewModel addPostViewModel);
         Task <int> UpdatePostAsync(int id, UpdatePostViewModel updatePostViewModel);

@@ -4,6 +4,7 @@ using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Category;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogWebApi.Controllers
 {
@@ -12,10 +13,12 @@ namespace BlogWebApi.Controllers
     public class CategoryController : ControllerBase
     {
         private ICategoryService _categoryService;
+        private BlogDBContext _blogDBContext;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, BlogDBContext blogDBContext)
         {
             _categoryService = categoryService;
+            _blogDBContext = blogDBContext;
         }
 
         [HttpGet]
@@ -47,6 +50,7 @@ namespace BlogWebApi.Controllers
 
             if (string.IsNullOrWhiteSpace(postCategory.Slug))
                 return BadRequest("Slug can not empty");
+
 
             var categoryId = await _categoryService.AddCagtegoryAsync(postCategory);
             return Ok(categoryId);
