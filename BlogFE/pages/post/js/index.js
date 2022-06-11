@@ -73,7 +73,11 @@ function displayListCategory(data) {
   listPost = data.items;
 }
 
-function addCategory() {
+function addPost() {
+
+  let imgFileUploadElement = document.getElementById('imgFileUpload');
+  let imagePath = imgFileUploadElement.dataset.path; 
+
   const addNameTextBox = document.getElementById("add-name");
   const addSlugTextBox = document.getElementById("add-slug");
 
@@ -229,6 +233,32 @@ function paginationCategory(pageNumber) {
   currentPage = pageNumber;
   getListCategory();
 }
+
+function uploadFile()
+        {
+            let fileUploadElement = document.getElementById('add-image');
+            if(!fileUploadElement) return;
+
+            let formData = new FormData();
+            formData.append('file', fileUploadElement.files[0]);
+            const url = "https://localhost:7213/api/File";
+
+
+            fetch(url,{
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                let imgFileUploadElement = document.getElementById('imgFileUpload');
+                if(!imgFileUploadElement) return;
+
+                imgFileUploadElement.style.display = 'block';
+                imgFileUploadElement.src = `https://localhost:7213/${data.path}`;
+                imgFileUploadElement.dataset.path = data.path;
+            });
+
+        }
 
 activePostTab();
 getListCategory();

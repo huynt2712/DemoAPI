@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using BlogWebApi.Models;
+using BlogWebApi.Entites;
 
 namespace BlogWebApi.Data
 {

@@ -1,6 +1,6 @@
 ﻿using BlogWebApi.Data;
 using BlogWebApi.Helper;
-using BlogWebApi.Models;
+using BlogWebApi.Entites;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Category;

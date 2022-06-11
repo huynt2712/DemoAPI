@@ -4,6 +4,7 @@ using BlogWebApi.Data;
 using BlogWebApi.Services;
 using BlogWebApi.Services.Interface;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
     
@@ -54,5 +55,16 @@ app.MapControllers();
 app.UseRouting();
 
 app.UseCors(MyAllowSpecificOrigins);
+
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+    RequestPath = new PathString("/Resources")
+});
+
+//Map  C:\Users\long.nguyendh.STS\Desktop\DemoAPI\WebApiCodeFirstDB\ +Resources
+//https://localhost:7213/  +Resources
+
+//host web => Folder wwwroot
 
 app.Run();

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BlogWebApi.Models
+namespace BlogWebApi.Entites
 {
     public class Post
     {
@@ -15,7 +15,7 @@ namespace BlogWebApi.Models
         [Required]
         [MaxLength(50)]
         public string Slug { get; set; }
-        public string Image { get; set; }
+        public string ImagePath { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int PostCategoryId { get; set; }

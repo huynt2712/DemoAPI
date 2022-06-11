@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BlogWebApi.Data;
-using BlogWebApi.Models;
+using BlogWebApi.Entites;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Category;

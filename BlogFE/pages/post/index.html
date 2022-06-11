@@ -161,7 +161,7 @@
         class="w3-container"
         action="javascript:void(0);"
         method="POST"
-        onsubmit="addCategory()"
+        onsubmit="addPost()"
       >
         <h3>Add</h3>
         <p>
@@ -203,12 +203,22 @@
         </p>
         <p>
           <label><b>Image</b></label>
-          <input
+          <input  class="w3-input w3-border postInput" 
+              type="file" 
+              id="add-image"
+              placeholder="image" />
+              <img width="100px" height="100px" id="imgFileUpload" hidden>
+              <br>
+              <input
+              class="w3-button w3-white w3-border w3-round"
+              value="Upload File"  id="btn_upload" onclick="uploadFile()"
+            />
+          <!-- <input
             class="w3-input w3-border postInput"
             type="text"
             id="add-image"
             placeholder="image"
-          />
+          /> -->
         </p>
         <p>
           <label><b>Category</b></label>

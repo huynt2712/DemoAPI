@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using BlogWebApi.Configuration;
 using BlogWebApi.Data;
-using BlogWebApi.Models;
+using BlogWebApi.Entites;
 using BlogWebApi.Services;
 
 namespace BlogWebApi.Controllers

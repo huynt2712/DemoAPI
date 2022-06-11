@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload file demo</title>
+</head>
+<body>
+    <input type="file" id="fileUpload" />
+    <img width="100px" height="100px" id="imgFileUpload" hidden>
+    <button id="btn_upload" onclick="uploadFile()">Upload</button>
+
+
+    <script>
+        function uploadFile()
+        {
+            let fileUploadElement = document.getElementById('fileUpload');
+            if(!fileUploadElement) return;
+
+            let formData = new FormData();
+            formData.append('file', fileUploadElement.files[0]);
+            const url = "https://localhost:7213/api/File";
+
+            fetch(url,{
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                let imgFileUploadElement = document.getElementById('imgFileUpload');
+                if(!imgFileUploadElement) return;
+
+                imgFileUploadElement.style.display = 'block';
+                imgFileUploadElement.src = `https://localhost:7213/${data.path}`;
+            });
+
+        }
+    </script>
+</body>
+</html>

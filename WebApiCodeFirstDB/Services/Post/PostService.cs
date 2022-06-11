@@ -1,6 +1,5 @@
 ﻿using BlogWebApi.Data;
-using BlogWebApi.Helper;
-using BlogWebApi.Models;
+using BlogWebApi.Entites;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Post;
@@ -18,27 +17,19 @@ namespace BlogWebApi.Services
             _blogDBContext = blogDBContext;
         }
 
-        public async Task <PagedList<PostViewModel>> GetAllPostAsync(PostRequestModel postRequestModel)
+        public async Task <List<PostViewModel>> GetAllPostAsync(PostRequestModel postRequestModel)
         {
-            var post = _blogDBContext.Posts
-                .Select(p => new PostViewModel
+            var post = new List<PostViewModel>();
+            post = await _blogDBContext.Posts.Select(p => new PostViewModel
             {
                 Id = p.Id,
                 Content = p.Content,
                 CreatedDate = p.CreatedDate,
                 Description = p.Description,
                 Title = p.Title,
-                Image = p.Image
-            });
-            if (!string.IsNullOrEmpty(postRequestModel.SearchText))
-            {
-                var searchTest = postRequestModel.SearchText.ToLower();
-                post =  post.Where(p => p.Content != null && p.Content.ToLower().Contains(searchTest)
-                || p.Description != null && p.Description.ToLower().Contains(searchTest));
-            }
-            post = post.OrderByDescending(p => p.Content);
-            return await PagedList<PostViewModel>.ToPagedListAsync(post,
-                postRequestModel.PageNumber, postRequestModel.PageSize);
+                Image = p.ImagePath
+            }).ToListAsync();
+            return post;
         }
 
         public async Task <int?> AddPostAsync(AddPostViewModel addPostViewModel)
@@ -56,7 +47,7 @@ namespace BlogWebApi.Services
                 Description = addPostViewModel.Description,
                 PostCategoryId = addPostViewModel.PostCategoryId,
                 Slug = addPostViewModel.Slug,
-                Image = addPostViewModel.Image,
+                ImagePath = addPostViewModel.ImagePath,
                 CreatedDate = DateTime.UtcNow
             });
             await _blogDBContext.SaveChangesAsync();
@@ -87,7 +78,7 @@ namespace BlogWebApi.Services
                 CreatedDate = p.CreatedDate,
                 Description = p.Description,
                 Title = p.Title,
-                Image = p.Image
+                Image = p.ImagePath
             }).FirstOrDefaultAsync(p => p.Id == id);
             return post;
         }
@@ -109,7 +100,7 @@ namespace BlogWebApi.Services
             post.Description = updatePostViewModel.Description;
             post.Content = updatePostViewModel.Content;
             post.PostCategoryId = updatePostViewModel.PostCategoryId;
-            post.Image = updatePostViewModel.Image;
+            post.ImagePath = updatePostViewModel.Image;
             post.UpdatedDate = DateTime.UtcNow;
             await _blogDBContext.SaveChangesAsync();
             return post.Id;

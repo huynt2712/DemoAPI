@@ -1,5 +1,5 @@
 ﻿using BlogWebApi.Helper;
-using BlogWebApi.Models;
+using BlogWebApi.Entites;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Category;
 

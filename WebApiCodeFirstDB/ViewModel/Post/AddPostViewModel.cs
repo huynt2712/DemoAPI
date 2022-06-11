@@ -10,7 +10,7 @@
 
         public string Slug { get; set; }
 
-        public string Image { get; set; }
+        public string ImagePath { get; set; }
 
         public int PostCategoryId { get; set; }
     }
