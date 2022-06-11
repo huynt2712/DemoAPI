@@ -3,6 +3,11 @@ let listCategory = [];
 let currentPage = 1;
 let pageSize = 5;
 
+//Constants
+const CategoryNotNullErrorcode = "ERR_1001";
+const NameNotEmptyErrorcode = "ERR_1002";
+const SlugNotEmptyErrorcode = "ERR_1003";
+
 function getListCategory(searchText = '')
 {
     fetch(`${url}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`)
@@ -69,14 +74,14 @@ function addCategory()
     if(!addNameTextBox) return;
     if(!addSlugTextBox) return;
 
-    let name = addNameTextBox.value.trim();
-    if(name === '')
-    {
-        let nameErrorElement = document.getElementById('category_name_error');
-        if(!nameErrorElement) return;
-        nameErrorElement.innerHTML = 'Name can not be empty';
-        return;
-    }
+    // let name = addNameTextBox.value.trim();
+    // if(name === '')
+    // {
+    //     let nameErrorElement = document.getElementById('category_name_error');
+    //     if(!nameErrorElement) return;
+    //     nameErrorElement.innerHTML = 'Name can not be empty';
+    //     return;
+    // }
 
     const category = {
         name: addNameTextBox.value.trim(),
@@ -91,13 +96,22 @@ function addCategory()
         },
         body: JSON.stringify(category)
     })
-    .then(response => response.json())
+    .then(response => {
+        if(!response.ok){
+            validateAddCategoryWithServerData(response);
+            return ;
+        }
+        else 
+           return response.json();
+    })
     .then((data) => {
         addNameTextBox.value = '';
         addSlugTextBox.value = '';
         getListCategory();
     })
-    .catch(error => console.error('Unable to add category', error));
+    .catch(error => {
+        return console.error('Unable to add category', error);
+    });
 }
 
 function deleteCategory(categoryId)
@@ -217,6 +231,24 @@ function setupPagintion(data){
 function paginationCategory(pageNumber){
     currentPage = pageNumber;
     getListCategory();
+}
+
+function validateAddCategoryWithServerData(data){
+    data.json().then(errorObj => {
+        switch(errorObj.errorCode)
+        {
+            case CategoryNotNullErrorcode:
+                break;
+            case NameNotEmptyErrorcode:
+                let nameErrorElement = document.getElementById('category_name_error');
+                if(!nameErrorElement) return;
+                nameErrorElement.innerHTML = errorObj.errorMessage;
+                break;
+            case SlugNotEmptyErrorcode:
+                break;
+            
+        }
+    })
 }
 
 activeCategoryTab();

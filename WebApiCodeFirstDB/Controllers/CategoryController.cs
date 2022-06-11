@@ -4,6 +4,8 @@ using BlogWebApi.Models;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Category;
+using BlogWebApi.ViewModel.Common;
+using BlogWebApi.Constant;
 
 namespace BlogWebApi.Controllers
 {
@@ -39,15 +41,28 @@ namespace BlogWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] AddCategoryViewModel postCategory)
         {
+            #region validate request model
             if (postCategory == null)
-                return BadRequest("Category can not null");
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = CategoryErrorCode.CategoryNotNull,
+                    ErrorMessage = "Category can not be null"
+                });
 
-            if(string.IsNullOrWhiteSpace(postCategory.Name))
-                return BadRequest("Name can not empty");
+            if (string.IsNullOrWhiteSpace(postCategory.Name))
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = CategoryErrorCode.NameNotEmpty,
+                    ErrorMessage = "Name can not empty"
+                });
 
             if (string.IsNullOrWhiteSpace(postCategory.Slug))
-                return BadRequest("Slug can not empty");
-
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = CategoryErrorCode.SlugNotEmpty,
+                    ErrorMessage = "Slug can not empty"
+                });
+            #endregion
             var categoryId = await _categoryService.AddCagtegoryAsync(postCategory);
             return Ok(categoryId);
         }

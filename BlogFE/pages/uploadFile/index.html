@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Document</title>
+</head>
+<body>
+    <input class="w3-input" id="fileupload" type="file" name="fileupload" />
+    <!-- <input class="w3-input" id="fileupload1" type="file" name="fileupload" /> -->
+    <img  class="w3-round" src="" alt="" width="100px" height="100px" id="fileUploadImg" hidden>
+    <br>
+    <button id="upload-button" onclick="uploadFile()" class="w3-btn w3-black" > Upload </button>
+
+    <script>
+         function uploadFile() {
+            let formData = new FormData();           
+            formData.append("file", fileupload.files[0]);
+            fetch('https://localhost:7022/api/File', {
+              method: "POST", 
+              body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                let uploadImageElement = document.getElementById('fileUploadImg');
+                if(!uploadImageElement) return;
+                uploadImageElement.style.display = 'block';
+                uploadImageElement.src  = `https://localhost:7022/${data.path}`;
+                uploadImageElement.dataset.path = data.path;
+                uploadImageElement.dataset.fileName = data.fileName;
+
+                //uploadImageElement.dataset.path
+            });
+        }
+        </script>
+</form>
+</body>
+</html>

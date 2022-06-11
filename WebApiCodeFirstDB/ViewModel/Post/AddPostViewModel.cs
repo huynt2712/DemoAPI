@@ -1,4 +1,6 @@
-﻿namespace BlogWebApi.ViewModel
+﻿using BlogWebApi.ViewModel.Common;
+
+namespace BlogWebApi.ViewModel
 {
     public class AddPostViewModel
     {
@@ -13,5 +15,7 @@
         public string Image { get; set; }
 
         public int PostCategoryId { get; set; }
+
+        public AttachmentModel Attachment { get; set; }
     }
 }

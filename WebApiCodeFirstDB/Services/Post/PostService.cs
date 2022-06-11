@@ -50,6 +50,10 @@ namespace BlogWebApi.Services
                 CreatedDate = DateTime.UtcNow
             });
             await _blogDBContext.SaveChangesAsync();
+
+            //Processing add attachment
+
+
             return newPost?.Entity?.Id;
         }
 

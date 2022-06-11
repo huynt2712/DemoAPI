@@ -8,6 +8,7 @@ namespace BlogWebApi.Data
     {
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostCategory> Categories { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
 
         public BlogDBContext()
         {
@@ -23,7 +24,6 @@ namespace BlogWebApi.Data
             optionsBuilder
                 .UseLazyLoadingProxies()
                 .ConfigureWarnings(w => w.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning));
-            //.UseSqlServer("Server=MSI;Database=PostCategoryDB;Password=1111;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
     }
 }
