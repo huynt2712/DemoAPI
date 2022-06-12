@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="editor_style.css">
+    <!-- <script type="text/javascript" src="ckeditor/ckeditor.js"></script> -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="wrapper">
+
+        <div id="editor_div">
+         <!-- <form method="post"> -->
+          <textarea id="text_editor"  name="text_editor"></textarea>
+          <button name="get_text" value="SUBMIT TEXT" id="btnSubmit" onclick="displayContetnCkEditor()">Show</button>
+         <!-- </form> -->
+
+         <div id="ckEditor_Content"></div>
+
+         <textarea id="text_editor1"  name="text_editor1"></textarea>
+
+        </div>
+        
+        </div>
+        <script type="text/javascript">
+             let editor = CKEDITOR.replace( 'text_editor' );	
+             let editor1 = CKEDITOR.replace( 'text_editor1' );	
+
+
+             function displayContetnCkEditor()
+             {
+                let textEditorElement = document.getElementById('text_editor');
+                if(!textEditorElement) return;
+                let textEditorContent = textEditorElement.textContent;
+
+                let ckEditorContentElement = document.getElementById('ckEditor_Content');
+                ckEditorContentElement.innerHTML = editor.getData();
+
+                editor1.setData(editor.getData());
+             }
+       </script>
+</body>
+</html>
