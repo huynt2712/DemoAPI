@@ -25,9 +25,11 @@ namespace BlogWebApi.Services
                 Id = p.Id,
                 Content = p.Content,
                 CreatedDate = p.CreatedDate,
+                UpdateDate = p.UpdatedDate,
                 Description = p.Description,
                 Title = p.Title,
-                Image = p.ImagePath
+                Slug = p.Slug,
+                ImagePath = p.ImagePath
             }).ToListAsync();
             return post;
         }
@@ -76,9 +78,10 @@ namespace BlogWebApi.Services
                 Id = p.Id,
                 Content = p.Content,
                 CreatedDate = p.CreatedDate,
+                Slug = p.Slug,
                 Description = p.Description,
                 Title = p.Title,
-                Image = p.ImagePath
+                ImagePath = p.ImagePath
             }).FirstOrDefaultAsync(p => p.Id == id);
             return post;
         }
@@ -99,8 +102,9 @@ namespace BlogWebApi.Services
             post.Title = updatePostViewModel.Title;
             post.Description = updatePostViewModel.Description;
             post.Content = updatePostViewModel.Content;
+            post.Slug = updatePostViewModel.Slug;
             post.PostCategoryId = updatePostViewModel.PostCategoryId;
-            post.ImagePath = updatePostViewModel.Image;
+            post.ImagePath = updatePostViewModel.ImagePath;
             post.UpdatedDate = DateTime.UtcNow;
             await _blogDBContext.SaveChangesAsync();
             return post.Id;

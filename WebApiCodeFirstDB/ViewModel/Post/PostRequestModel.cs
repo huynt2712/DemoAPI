@@ -2,7 +2,7 @@
 
 namespace BlogWebApi.ViewModel.Post
 {
-    public class PostRequestModel:QueryStringParameters
+    public class PostRequestModel: QueryStringParameters
     {
     }
 }

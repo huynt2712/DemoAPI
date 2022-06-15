@@ -98,7 +98,7 @@ function addCategory() {
     return;
   }
 
-  slug = addSlugTextBox.value.trim();
+  let slug = addSlugTextBox.value.trim();
   if (slug === "") {
     if (!slugErrorElement) return;
     slugErrorElement.innerHTML = "Slug can not be empty";
@@ -156,6 +156,24 @@ function displayEditForm(categoryId) {
 
 function updateCategory() {
   const categoryId = document.getElementById("edit-id").value;
+  const NameEditTextBox = document.getElementById("edit-name");
+  const SlugEditTextBox = document.getElementById("edit-slug");
+
+  let nameEditErrorElement = document.getElementById("categoryedit_name_error");
+  let slugEditErrorElement = document.getElementById("categoryedit_slug_error");
+
+  let nameEdit = NameEditTextBox.value.trim();
+  if (nameEdit === "") {
+    if (!nameEditErrorElement) return;
+    nameEditErrorElement.innerHTML = "Name can not be empty";
+    return;
+  }
+  let slugEdit = SlugEditTextBox.value.trim();
+  if (slugEdit === "") {
+    if (!slugEditErrorElement) return;
+    slugEditErrorElement.innerHTML = "Slug can not be empty";
+    return;
+  }
   const category = {
     name: document.getElementById("edit-name").value.trim(),
     slug: document.getElementById("edit-slug").value.trim(),

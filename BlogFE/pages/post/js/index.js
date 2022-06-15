@@ -1,23 +1,24 @@
 const url = "https://localhost:7213/api/Post";
+const url1 = "https://localhost:7213/api/Category";
 let listPost = [];
 let currentPage = 1;
-let pageSize = 5;
+let pageSize = 1;
 
-function getListCategory(searchText = "") {
+function getListPost(searchText = "") {
   fetch(
     `${url}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`
   )
     .then((response) => response.json()) //=> arrow function
     .then((data) => {
-      displayListCategory(data);
+      displayListPost(data);
 
       if (data.totalPages > 0) setupPagintion(data);
     })
-    .catch((error) => console.error("Unable to get category list.", error));
+    .catch((error) => console.error("Unable to get post list.", error));
 }
 
-function displayListCategory(data) {
-  const tBody = document.getElementById("listCategoryIds");
+function displayListPost(data) {
+  const tBody = document.getElementById("listPostIds");
   tBody.innerHTML = "";
 
   data.items.forEach((post) => {
@@ -27,20 +28,35 @@ function displayListCategory(data) {
     td1.appendChild(textNode);
 
     let td2 = tr.insertCell(1);
-    textNode = document.createTextNode(post.discription);
+    textNode = document.createTextNode(post.description);
     td2.appendChild(textNode);
 
-    // let td3 = tr.insertCell(2);
-    // textNode = document.createTextNode(
-    //   new Date(category.createAt).toDateString()
-    // );
-    // td3.appendChild(textNode);
+    let td3 = tr.insertCell(2);
+    textNode = document.createTextNode(post.content);
+    td3.appendChild(textNode);
 
-    // let td4 = tr.insertCell(3);
-    // textNode = document.createTextNode(
-    //   category.updateAt ? "" : new Date(category.updateAt).toDateString()
-    // );
-    // td4.appendChild(textNode);
+    let td4 = tr.insertCell(3);
+    textNode = document.createTextNode(post.slug);
+    td4.appendChild(textNode);
+
+    let td5 = tr.insertCell(4);
+    const img = document.createElement("img");
+    let uploadImage = img.cloneNode(false);
+    uploadImage.src = `https://localhost:7213/${post.imagePath}`;
+    uploadImage.setAttribute("style", "width:100px,height:100px");
+    td5.appendChild(uploadImage);
+
+    let td6 = tr.insertCell(5);
+    textNode = document.createTextNode(
+      new Date(post.createddate).toDateString()
+    );
+    td6.appendChild(textNode);
+
+    let td7 = tr.insertCell(6);
+    textNode = document.createTextNode(
+      post.updateddate ? "" : new Date(post.updateddate).toDateString()
+    );
+    td7.appendChild(textNode);
 
     const button = document.createElement("button");
     let editButton = button.cloneNode(false);
@@ -53,8 +69,8 @@ function displayListCategory(data) {
     );
     editButton.setAttribute("onclick", `displayEditForm(${post.id})`);
 
-    let td3 = tr.insertCell(2);
-    td3.appendChild(editButton);
+    let td8 = tr.insertCell(7);
+    td8.appendChild(editButton);
 
     let deletetButton = button.cloneNode(false);
     deletetButton.innerHTML = "Delete";
@@ -66,34 +82,77 @@ function displayListCategory(data) {
     );
     deletetButton.setAttribute("onclick", `deleteCategory(${post.id})`);
 
-    let td4 = tr.insertCell(3);
-    td4.appendChild(deletetButton);
+    let td9 = tr.insertCell(8);
+    td9.appendChild(deletetButton);
   });
 
   listPost = data.items;
 }
 
 function addPost() {
+  let imgFileUploadElement = document.getElementById("imgFileUpload");
+  let imagePath = imgFileUploadElement.dataset.path;
 
-  let imgFileUploadElement = document.getElementById('imgFileUpload');
-  let imagePath = imgFileUploadElement.dataset.path; 
-
-  const addNameTextBox = document.getElementById("add-name");
+  const addTitleTextBox = document.getElementById("add-title");
+  const addDescriptionTextBox = document.getElementById("add-description");
+  const addContentTextBox = document.getElementById("add-content");
   const addSlugTextBox = document.getElementById("add-slug");
 
-  if (!addNameTextBox) return;
+  fetch(
+    `${url1}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      let category = document.getElementById("add-category");
+      const option = document.createElement("option");
+      option.textContent = data.name;
+      option.value = data.id;
+      category.appendChild(option);
+    });
+  if (!addTitleTextBox) return;
+  if (!addDescriptionTextBox) return;
+  if (!addContentTextBox) return;
   if (!addSlugTextBox) return;
 
-  let name = addNameTextBox.value.trim();
-  if (name === "") {
-    let nameErrorElement = document.getElementById("category_name_error");
-    if (!nameErrorElement) return;
-    nameErrorElement.innerHTML = "Name can not be empty";
+  let title = addTitleTextBox.value.trim();
+  if (title === "") {
+    let titleErrorElement = document.getElementById("post_title_error");
+    if (!titleErrorElement) return;
+    titleErrorElement.innerHTML = "Title can not be empty";
     return;
   }
 
-  const category = {
-    name: addNameTextBox.value.trim(),
+  let description = addDescriptionTextBox.value.trim();
+  if (description === "") {
+    let descriptionErrorElement = document.getElementById(
+      "post_description_error"
+    );
+    if (!descriptionErrorElement) return;
+    descriptionErrorElement.innerHTML = "description can not be empty";
+    return;
+  }
+
+  let content = addContentTextBox.value.trim();
+  if (content === "") {
+    let contentErrorElement = document.getElementById("post_content_error");
+    if (!contentErrorElement) return;
+    contentErrorElement.innerHTML = "Content can not be empty";
+    return;
+  }
+
+  let slug = addSlugTextBox.value.trim();
+  if (slug === "") {
+    let slugErrorElement = document.getElementById("post_slug_error");
+    if (!slugErrorElement) return;
+    slugErrorElement.innerHTML = "Slug can not be empty";
+    return;
+  }
+
+  const post = {
+    title: addTitleTextBox.value.trim(),
+    description: addDescriptionTextBox.value.trim(),
+    content: addContentTextBox.value.trim(),
+    imagepath: imagePath,
     slug: addSlugTextBox.value.trim(),
   };
 
@@ -103,44 +162,84 @@ function addPost() {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(category),
+    body: JSON.stringify(post),
   })
     .then((response) => response.json())
     .then((data) => {
-      addNameTextBox.value = "";
+      addTitleTextBox.value = "";
+      addDescriptionTextBox.value = "";
+      addContentTextBox.value = "";
       addSlugTextBox.value = "";
-      getListCategory();
+      getListPost();
     })
-    .catch((error) => console.error("Unable to add category", error));
+    .catch((error) => console.error("Unable to add post", error));
 }
 
 function deleteCategory(categoryId) {
   fetch(`${url}/${categoryId}`, {
     method: "DELETE",
   })
-    .then(() => getListCategory())
-    .catch((error) => console.error("Unable to delete category", error));
+    .then(() => getListPost())
+    .catch((error) => console.error("Unable to delete post", error));
 }
 
 function closeInput() {
   document.getElementById("editForm").style.display = "none";
 }
 
-function displayEditForm(categoryId) {
-  var category = listCategory.find((category) => category.id === categoryId);
+function displayEditForm(postId) {
+  var post = listPost.find((post) => post.id === postId);
 
-  document.getElementById("edit-name").value = category.name;
-  document.getElementById("edit-slug").value = category.slug;
-  document.getElementById("edit-id").value = category.id;
+  document.getElementById("edit-title").value = post.title;
+  document.getElementById("edit-description").value = post.description;
+  document.getElementById("edit-content").value = post.content;
+  document.getElementById("edit-id").value = post.id;
   document.getElementById("editForm").style.display = "block";
 }
 
-function updateCategory() {
-  const categoryId = document.getElementById("edit-id").value;
-  const category = {
-    name: document.getElementById("edit-name").value.trim(),
-    slug: document.getElementById("edit-slug").value.trim(),
-  };
+function updatePost() {
+  const postId = document.getElementById("edit-id").value;
+  const TitleEditTextBox = document.getElementById("edit-title");
+  const DescriptionEditTextBox = document.getElementById("edit-description");
+  const ContentEditTextBox = document.getElementById("edit-content");
+  const SlugEditTextBox = document.getElementById("edit-slug");
+
+  let titleEditErrorElement = document.getElementById("postedit_title_error");
+  let descriptionEditErrorElement = document.getElementById(
+    "postedit_description_error"
+  );
+  let ContentEditErrorElement = document.getElementById(
+    "postedit_content_error"
+  );
+  let slugEditErrorElement = document.getElementById("postedit_slug_error");
+
+  let titleEdit = TitleEditTextBox.value.trim();
+  if (titleEdit === "") {
+    if (!titleEditErrorElement) return;
+    titleEditErrorElement.innerHTML = "Title can not be empty";
+    return;
+  }
+
+  let descriptionEdit = DescriptionEditTextBox.value.trim();
+  if (descriptionEdit === "") {
+    if (!descriptionEditErrorElement) return;
+    descriptionEditErrorElement.innerHTML = "Description can not be empty";
+    return;
+  }
+
+  let contentEdit = ContentEditTextBox.value.trim();
+  if (contentEdit === "") {
+    if (!contentEditErrorElement) return;
+    contentEditErrorElement.innerHTML = "Title can not be empty";
+    return;
+  }
+
+  let slugEdit = SlugEditTextBox.value.trim();
+  if (slugEdit === "") {
+    if (!slugEditErrorElement) return;
+    slugEditErrorElement.innerHTML = "Slug can not be empty";
+    return;
+  }
 
   fetch(`${url}/${categoryId}`, {
     method: "PUT",
@@ -150,7 +249,7 @@ function updateCategory() {
     },
     body: JSON.stringify(category),
   })
-    .then(() => getListCategory())
+    .then(() => getListPost())
     .catch((error) => console.error("Unable to update category", error));
 
   closeInput();
@@ -165,7 +264,7 @@ function activePostTab() {
   }
 }
 
-function searchCategory() {
+function searchPost() {
   let delay = (() => {
     let timer = 0;
     return function (callback, ms) {
@@ -174,24 +273,22 @@ function searchCategory() {
     };
   })();
 
-  let searchCategoryElement = document.getElementById("searchCategory");
-  if (searchCategoryElement) {
-    searchCategoryElement.addEventListener("keyup", () => {
+  let searchPostElement = document.getElementById("searchPost");
+  if (searchPostElement) {
+    searchPostElement.addEventListener("keyup", () => {
       delay(function () {
-        let searchCategoryValue = searchCategoryElement.value.toLowerCase();
-        getListCategory(searchCategoryValue);
+        let searchPostValue = searchPostElement.value.toLowerCase();
+        getListPost(searchPostValue);
       }, 1000);
     });
   }
 }
 
 function setupPagintion(data) {
-  let categoryPaginationElement = document.getElementById(
-    "category_pagination"
-  );
-  if (!categoryPaginationElement) return;
+  let postPaginationElement = document.getElementById("post_pagination");
+  if (!postPaginationElement) return;
 
-  categoryPaginationElement.innerHTML = "";
+  postPaginationElement.innerHTML = "";
   if (data.hasPrevious) {
     let itemElement = document.createElement("a");
     itemElement.innerHTML = `&laquo;`;
@@ -200,67 +297,58 @@ function setupPagintion(data) {
       "onclick",
       `paginationCategory(${currentPage - 1})`
     );
-    categoryPaginationElement.append(itemElement);
+    postPaginationElement.append(itemElement);
   }
 
   for (let pageNumber = 0; pageNumber < data.totalPages; pageNumber++) {
     itemElement = document.createElement("a");
     itemElement.classList.add("w3-button", `pageNumber_${pageNumber + 1}`);
     itemElement.innerHTML = pageNumber + 1;
-    itemElement.setAttribute(
-      "onclick",
-      `paginationCategory(${pageNumber + 1})`
-    );
-    categoryPaginationElement.append(itemElement);
+    itemElement.setAttribute("onclick", `paginationPost(${pageNumber + 1})`);
+    postPaginationElement.append(itemElement);
   }
 
   if (data.hasNext) {
     let itemElement = document.createElement("a");
     itemElement.innerHTML = `&raquo;`;
     itemElement.classList.add("w3-button", `pageNumber_${currentPage + 1}`);
-    itemElement.setAttribute(
-      "onclick",
-      `paginationCategory(${currentPage + 1})`
-    );
-    categoryPaginationElement.append(itemElement);
+    itemElement.setAttribute("onclick", `paginationPost(${currentPage + 1})`);
+    postPaginationElement.append(itemElement);
   }
 
   let currentPageElement = document.querySelector(`.pageNumber_${currentPage}`);
   currentPageElement.classList.add("w3-green");
 }
 
-function paginationCategory(pageNumber) {
+function paginationPost(pageNumber) {
   currentPage = pageNumber;
-  getListCategory();
+  getListPost();
 }
 
-function uploadFile()
-        {
-            let fileUploadElement = document.getElementById('add-image');
-            if(!fileUploadElement) return;
+function uploadFile() {
+  let fileUploadElement = document.getElementById("add-image");
+  if (!fileUploadElement) return;
 
-            let formData = new FormData();
-            formData.append('file', fileUploadElement.files[0]);
-            const url = "https://localhost:7213/api/File";
+  let formData = new FormData();
+  formData.append("file", fileUploadElement.files[0]);
+  const url = "https://localhost:7213/api/File";
 
+  fetch(url, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      let imgFileUploadElement = document.getElementById("imgFileUpload");
+      if (!imgFileUploadElement) return;
 
-            fetch(url,{
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                let imgFileUploadElement = document.getElementById('imgFileUpload');
-                if(!imgFileUploadElement) return;
-
-                imgFileUploadElement.style.display = 'block';
-                imgFileUploadElement.src = `https://localhost:7213/${data.path}`;
-                imgFileUploadElement.dataset.path = data.path;
-            });
-
-        }
+      imgFileUploadElement.style.display = "block";
+      imgFileUploadElement.src = `https://localhost:7213/${data.path}`;
+      imgFileUploadElement.dataset.path = data.path;
+    });
+}
 
 activePostTab();
-getListCategory();
-searchCategory();
+getListPost();
+searchPost();
 closeInput();

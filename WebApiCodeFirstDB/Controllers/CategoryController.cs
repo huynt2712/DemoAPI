@@ -13,12 +13,10 @@ namespace BlogWebApi.Controllers
     public class CategoryController : ControllerBase
     {
         private ICategoryService _categoryService;
-        private BlogDBContext _blogDBContext;
 
-        public CategoryController(ICategoryService categoryService, BlogDBContext blogDBContext)
+        public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
-            _blogDBContext = blogDBContext;
         }
 
         [HttpGet]

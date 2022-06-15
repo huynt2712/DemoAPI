@@ -172,16 +172,17 @@
             id="add-title"
             placeholder="title"
           />
-          <span class="w3-red" id="post_name_error"></span>
+          <span class="w3-red" id="post_title_error"></span>
         </p>
         <p>
-          <label><b>Discription</b></label>
+          <label><b>Description</b></label>
           <input
             class="w3-input w3-border postInput"
             type="text"
-            id="add-discription"
-            placeholder="discription"
+            id="add-description"
+            placeholder="description"
           />
+          <span class="w3-red" id="post_description_error"></span>
         </p>
         <p>
           <label><b>Content</b></label>
@@ -191,6 +192,7 @@
             id="add-content"
             placeholder="content"
           />
+          <span class="w3-red" id="post_content_error"></span>
         </p>
         <p>
           <label><b>Slug</b></label>
@@ -200,19 +202,25 @@
             id="add-slug"
             placeholder="slug"
           />
+          <span class="w3-red" id="post_slug_error"></span>
         </p>
         <p>
           <label><b>Image</b></label>
-          <input  class="w3-input w3-border postInput" 
-              type="file" 
-              id="add-image"
-              placeholder="image" />
-              <img width="100px" height="100px" id="imgFileUpload" hidden>
-              <br>
-              <input
-              class="w3-button w3-white w3-border w3-round"
-              value="Upload File"  id="btn_upload" onclick="uploadFile()"
-            />
+          <input
+            class="w3-input w3-border postInput"
+            type="file"
+            id="add-image"
+            placeholder="image"
+          />
+          <img width="100px" height="100px" id="imgFileUpload" hidden />
+          <br />
+          <input
+            type="button"
+            class="w3-button w3-white w3-border w3-round"
+            value="Upload File"
+            id="btn_upload"
+            onclick="uploadFile()"
+          />
           <!-- <input
             class="w3-input w3-border postInput"
             type="text"
@@ -222,12 +230,7 @@
         </p>
         <p>
           <label><b>Category</b></label>
-          <input
-            class="w3-input w3-border postInput"
-            type="text"
-            id="add-category"
-            placeholder="category"
-          />
+          <select id="add-category"></select>
         </p>
         <input
           class="w3-button w3-white w3-border w3-round-large"
@@ -253,16 +256,15 @@
               <th>Content</th>
               <th>Slug</th>
               <th>Image</th>
-              <th>Category</th>
               <th>Create Date</th>
               <th>Update Date</th>
               <th></th>
               <th></th>
             </tr>
-            <tbody id="listCategoryIds"></tbody>
+            <tbody id="listPostIds"></tbody>
           </table>
           <br />
-          <div class="w3-bar w3-center" id="category_pagination">
+          <div class="w3-bar w3-center" id="post_pagination">
             <!-- <a href="#" class="w3-button">&laquo;</a>
               <a href="#" class="w3-button">1</a>
               <a href="#" class="w3-button">2</a>
@@ -295,6 +297,7 @@
               id="edit-title"
               placeholder="title"
             />
+            <span class="w3-red" id="postedit_title_error"></span>
           </p>
           <p>
             <label><b>Description</b></label>
@@ -302,35 +305,33 @@
               class="w3-input w3-border postInput"
               type="text"
               id="edit-description"
-              placeholder="discription"
+              placeholder="description"
             />
+            <span class="w3-red" id="postedit_description_error"></span>
           </p>
           <p>
             <label><b>Content</b></label>
             <input
               class="w3-input w3-border postInput"
               type="text"
-              id="edit-description"
-              placeholder="discription"
+              id="edit-content"
+              placeholder="content"
             />
+            <span class="w3-red" id="postedit_content_error"></span>
           </p>
           <p>
-            <label><b>Image</b></label>
+            <label><b>Slug</b></label>
             <input
               class="w3-input w3-border postInput"
               type="text"
-              id="edit-description"
-              placeholder="discription"
+              id="edit-slug"
+              placeholder="slug"
             />
+            <span class="w3-red" id="postedit_slug_error"></span>
           </p>
           <p>
             <label><b>Category</b></label>
-            <input
-              class="w3-input w3-border postInput"
-              type="text"
-              id="edit-description"
-              placeholder="discription"
-            />
+            <select id="edit-category"></select>
           </p>
           <input
             class="w3-button w3-white w3-border w3-round-large"
