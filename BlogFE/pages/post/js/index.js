@@ -1,12 +1,12 @@
-const url = "https://localhost:7213/api/Post";
-const url1 = "https://localhost:7213/api/Category";
+const postUrl = "https://localhost:7213/api/Post";
+const categoryUrl = "https://localhost:7213/api/Category";
 let listPost = [];
 let currentPage = 1;
 let pageSize = 1;
 
 function getListPost(searchText = "") {
   fetch(
-    `${url}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`
+    `${postUrl}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`
   )
     .then((response) => response.json()) //=> arrow function
     .then((data) => {
@@ -48,13 +48,13 @@ function displayListPost(data) {
 
     let td6 = tr.insertCell(5);
     textNode = document.createTextNode(
-      new Date(post.createddate).toDateString()
+      new Date(post.createdDate).toDateString()
     );
     td6.appendChild(textNode);
 
     let td7 = tr.insertCell(6);
     textNode = document.createTextNode(
-      post.updateddate ? "" : new Date(post.updateddate).toDateString()
+      post.updateDate ? "" : new Date(post.updateDate).toDateString()
     );
     td7.appendChild(textNode);
 
@@ -97,22 +97,13 @@ function addPost() {
   const addDescriptionTextBox = document.getElementById("add-description");
   const addContentTextBox = document.getElementById("add-content");
   const addSlugTextBox = document.getElementById("add-slug");
+  const addCategorySelect = document.getElementById('add-category');
 
-  fetch(
-    `${url1}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      let category = document.getElementById("add-category");
-      const option = document.createElement("option");
-      option.textContent = data.name;
-      option.value = data.id;
-      category.appendChild(option);
-    });
   if (!addTitleTextBox) return;
   if (!addDescriptionTextBox) return;
   if (!addContentTextBox) return;
   if (!addSlugTextBox) return;
+  if(!addCategorySelect) return;
 
   let title = addTitleTextBox.value.trim();
   if (title === "") {
@@ -152,11 +143,12 @@ function addPost() {
     title: addTitleTextBox.value.trim(),
     description: addDescriptionTextBox.value.trim(),
     content: addContentTextBox.value.trim(),
-    imagepath: imagePath,
     slug: addSlugTextBox.value.trim(),
+    imagepath: imagePath,
+    postCategoryId: addCategorySelect.value
   };
 
-  fetch(`${url}`, {
+  fetch(`${postUrl}`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -176,7 +168,7 @@ function addPost() {
 }
 
 function deleteCategory(categoryId) {
-  fetch(`${url}/${categoryId}`, {
+  fetch(`${postUrl}/${categoryId}`, {
     method: "DELETE",
   })
     .then(() => getListPost())
@@ -241,7 +233,7 @@ function updatePost() {
     return;
   }
 
-  fetch(`${url}/${categoryId}`, {
+  fetch(`${postUrl}/${categoryId}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -331,9 +323,9 @@ function uploadFile() {
 
   let formData = new FormData();
   formData.append("file", fileUploadElement.files[0]);
-  const url = "https://localhost:7213/api/File";
+  const postUrl = "https://localhost:7213/api/File";
 
-  fetch(url, {
+  fetch(postUrl, {
     method: "POST",
     body: formData,
   })
@@ -348,7 +340,26 @@ function uploadFile() {
     });
 }
 
+function getListCategory(searchText = "") {
+  fetch(
+    `${categoryUrl}?SearchText=${searchText}&PageNumber=${1}&PageSize=${10}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      let categorySelectElement = document.getElementById('add-category');
+      if(!categorySelectElement) return;
+
+      data.items.forEach((category) => {
+        let option = document.createElement("option");
+        option.text = category.name;
+        option.value = category.id;
+        categorySelectElement.add(option);
+      })
+    })
+    .catch((error) => console.error("Unable to get category list.", error));
+}
 activePostTab();
 getListPost();
 searchPost();
 closeInput();
+getListCategory();

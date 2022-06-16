@@ -86,24 +86,24 @@ function addCategory() {
   slugErrorElement.innerHTML = "";
 
   let name = addNameTextBox.value.trim();
-  if (name === "") {
-    if (!nameErrorElement) return;
-    nameErrorElement.innerHTML = "Name can not be empty";
-    return;
-  }
+  // if (name === "") {
+  //   if (!nameErrorElement) return;
+  //   nameErrorElement.innerHTML = "Name can not be empty";
+  //   return;
+  // }
   var categoryName = listCategory.find((category) => category.name === name);
-  if (categoryName != null) {
-    if (!nameErrorElement) return;
-    nameErrorElement.innerHTML = "Name is exist, please input name again";
-    return;
-  }
+  // if (categoryName != null) {
+  //   if (!nameErrorElement) return;
+  //   nameErrorElement.innerHTML = "Name is exist, please input name again";
+  //   return;
+  // }
 
   let slug = addSlugTextBox.value.trim();
-  if (slug === "") {
-    if (!slugErrorElement) return;
-    slugErrorElement.innerHTML = "Slug can not be empty";
-    return;
-  }
+  // if (slug === "") {
+  //   if (!slugErrorElement) return;
+  //   slugErrorElement.innerHTML = "Slug can not be empty";
+  //   return;
+  // }
   var categorySlug = listCategory.find((category) => category.slug === slug);
   if (categorySlug != null) {
     if (!slugErrorElement) return;
@@ -275,3 +275,16 @@ activeCategoryTab();
 getListCategory();
 searchCategory();
 closeInput();
+
+
+/*
+Validation
+
+Front-end
+
+Backend-end => validate api + return messsage => message show FE
+
+
+Validate FE + BE
+
+*/
