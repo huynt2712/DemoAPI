@@ -21,7 +21,7 @@ function displayListPost(data) {
   const tBody = document.getElementById("listPostIds");
   tBody.innerHTML = "";
 
-  data.items.forEach((post) => {
+  data.forEach((post) => {
     let tr = tBody.insertRow();
     let td1 = tr.insertCell(0);
     let textNode = document.createTextNode(post.title);
