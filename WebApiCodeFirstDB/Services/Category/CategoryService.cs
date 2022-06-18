@@ -63,6 +63,12 @@ namespace BlogWebApi.Services
 
         public async Task<int> AddCagtegoryAsync(AddCategoryViewModel postCategory)
         {
+            var isExisting = await _blogDBContext.Categories
+                .AnyAsync(x => x.Name == postCategory.Name || x.Slug == postCategory.Slug);
+
+            if (isExisting)
+                return -1;
+
             var newCategory = await _blogDBContext.Categories.AddAsync(new PostCategory
             {
                 Name = postCategory.Name,

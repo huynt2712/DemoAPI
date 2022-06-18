@@ -15,6 +15,8 @@
     />
     <link rel="stylesheet" href="css/index.css" />
 
+    <script src="./js/ckeditor/ckeditor.js"></script>
+
     <style>
       html,
       body,
@@ -186,12 +188,12 @@
         </p>
         <p>
           <label><b>Content</b></label>
-          <input
+          <textarea
             class="w3-input w3-border postInput"
             type="text"
             id="add-content"
             placeholder="content"
-          />
+          ></textarea> 
           <span class="w3-red" id="post_content_error"></span>
         </p>
         <p>
@@ -253,7 +255,7 @@
             <tr>
               <th>Title</th>
               <th>Description</th>
-              <th>Content</th>
+              <!-- <th>Content</th> -->
               <th>Slug</th>
               <th>Image</th>
               <th>Create Date</th>

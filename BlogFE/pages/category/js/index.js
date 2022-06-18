@@ -86,12 +86,12 @@ function addCategory() {
   slugErrorElement.innerHTML = "";
 
   let name = addNameTextBox.value.trim();
-  // if (name === "") {
-  //   if (!nameErrorElement) return;
-  //   nameErrorElement.innerHTML = "Name can not be empty";
-  //   return;
-  // }
-  var categoryName = listCategory.find((category) => category.name === name);
+  if (name === "") {
+    if (!nameErrorElement) return;
+    nameErrorElement.innerHTML = "Name can not be empty";
+    return;
+  }
+  // var categoryName = listCategory.find((category) => category.name === name);
   // if (categoryName != null) {
   //   if (!nameErrorElement) return;
   //   nameErrorElement.innerHTML = "Name is exist, please input name again";
@@ -99,17 +99,17 @@ function addCategory() {
   // }
 
   let slug = addSlugTextBox.value.trim();
-  // if (slug === "") {
-  //   if (!slugErrorElement) return;
-  //   slugErrorElement.innerHTML = "Slug can not be empty";
-  //   return;
-  // }
-  var categorySlug = listCategory.find((category) => category.slug === slug);
-  if (categorySlug != null) {
+  if (slug === "") {
     if (!slugErrorElement) return;
-    slugErrorElement.innerHTML = "Slug is exist, please input slug again";
+    slugErrorElement.innerHTML = "Slug can not be empty";
     return;
   }
+  // var categorySlug = listCategory.find((category) => category.slug === slug);
+  // if (categorySlug != null) {
+  //   if (!slugErrorElement) return;
+  //   slugErrorElement.innerHTML = "Slug is exist, please input slug again";
+  //   return;
+  // }
 
   const category = {
     name: addNameTextBox.value.trim(),
@@ -124,11 +124,34 @@ function addCategory() {
     },
     body: JSON.stringify(category),
   })
-    .then((response) => response.json())
-    .then((data) => {
-      addNameTextBox.value = "";
-      addSlugTextBox.value = "";
-      getListCategory();
+    .then((response) => {
+      if(!response.ok){
+        response.json().then(errorObj => {
+          console.log(errorObj);
+          switch(errorObj.errorCode){
+            case "1001":
+              nameErrorElement.innerHTML = errorObj.errorMessage;
+              break;
+            case "1002":
+              nameErrorElement.innerHTML = errorObj.errorMessage;
+              break;
+            case "1003":
+                slugErrorElement.innerHTML = errorObj.errorMessage;
+                break;
+            case "1004":
+              nameErrorElement.innerHTML = errorObj.errorMessage;
+              break;
+          }
+        })
+        return;
+      }
+      else
+      {
+        addNameTextBox.value = "";
+        addSlugTextBox.value = "";
+        getListCategory();
+        return response.json();
+      }
     })
     .catch((error) => console.error("Unable to add category", error));
 }
@@ -286,5 +309,4 @@ Backend-end => validate api + return messsage => message show FE
 
 
 Validate FE + BE
-
 */

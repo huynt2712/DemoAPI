@@ -31,28 +31,28 @@ function displayListPost(data) {
     textNode = document.createTextNode(post.description);
     td2.appendChild(textNode);
 
-    let td3 = tr.insertCell(2);
-    textNode = document.createTextNode(post.content);
-    td3.appendChild(textNode);
+    // let td3 = tr.insertCell(2);
+    // textNode = document.createTextNode(post.content);
+    // td3.appendChild(textNode);
 
-    let td4 = tr.insertCell(3);
+    let td4 = tr.insertCell(2);
     textNode = document.createTextNode(post.slug);
     td4.appendChild(textNode);
 
-    let td5 = tr.insertCell(4);
+    let td5 = tr.insertCell(3);
     const img = document.createElement("img");
     let uploadImage = img.cloneNode(false);
     uploadImage.src = `https://localhost:7213/${post.imagePath}`;
-    uploadImage.setAttribute("style", "width:100px,height:100px");
+    uploadImage.setAttribute("style", "width:100px;height:100px");
     td5.appendChild(uploadImage);
 
-    let td6 = tr.insertCell(5);
+    let td6 = tr.insertCell(4);
     textNode = document.createTextNode(
       new Date(post.createdDate).toDateString()
     );
     td6.appendChild(textNode);
 
-    let td7 = tr.insertCell(6);
+    let td7 = tr.insertCell(5);
     textNode = document.createTextNode(
       post.updateDate ? "" : new Date(post.updateDate).toDateString()
     );
@@ -69,7 +69,7 @@ function displayListPost(data) {
     );
     editButton.setAttribute("onclick", `displayEditForm(${post.id})`);
 
-    let td8 = tr.insertCell(7);
+    let td8 = tr.insertCell(6);
     td8.appendChild(editButton);
 
     let deletetButton = button.cloneNode(false);
@@ -82,7 +82,7 @@ function displayListPost(data) {
     );
     deletetButton.setAttribute("onclick", `deleteCategory(${post.id})`);
 
-    let td9 = tr.insertCell(8);
+    let td9 = tr.insertCell(7);
     td9.appendChild(deletetButton);
   });
 
@@ -123,13 +123,15 @@ function addPost() {
     return;
   }
 
-  let content = addContentTextBox.value.trim();
+  let content = contentEditor.getData();
   if (content === "") {
     let contentErrorElement = document.getElementById("post_content_error");
     if (!contentErrorElement) return;
     contentErrorElement.innerHTML = "Content can not be empty";
     return;
   }
+
+ 
 
   let slug = addSlugTextBox.value.trim();
   if (slug === "") {
@@ -142,7 +144,7 @@ function addPost() {
   const post = {
     title: addTitleTextBox.value.trim(),
     description: addDescriptionTextBox.value.trim(),
-    content: addContentTextBox.value.trim(),
+    content: content,
     slug: addSlugTextBox.value.trim(),
     imagepath: imagePath,
     postCategoryId: addCategorySelect.value
@@ -363,3 +365,5 @@ getListPost();
 searchPost();
 closeInput();
 getListCategory();
+
+let contentEditor = CKEDITOR.replace('add-content');

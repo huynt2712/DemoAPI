@@ -5,6 +5,7 @@ using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Category;
 using Microsoft.EntityFrameworkCore;
+using BlogWebApi.ViewModel.Common;
 
 namespace BlogWebApi.Controllers
 {
@@ -41,16 +42,36 @@ namespace BlogWebApi.Controllers
         public async Task<IActionResult> PostAsync([FromBody] AddCategoryViewModel postCategory)
         {
             if (postCategory == null)
-                return BadRequest("Category can not null");
+                return BadRequest(new ErrorReturnModel 
+                {
+                    ErrorCode = "1001",//const
+                    ErrorMessage = "Category can not be null"
+                }); 
 
-            if(string.IsNullOrWhiteSpace(postCategory.Name))
-                return BadRequest("Name can not empty");
+            if (string.IsNullOrWhiteSpace(postCategory.Name))
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1002",
+                    ErrorMessage = "Name can not be empty"
+                });
 
             if (string.IsNullOrWhiteSpace(postCategory.Slug))
-                return BadRequest("Slug can not empty");
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1003",
+                    ErrorMessage = "Slug can not be empty"
+                });
 
 
             var categoryId = await _categoryService.AddCagtegoryAsync(postCategory);
+
+            if (categoryId == -1)
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1004",
+                    ErrorMessage = "Cagegory is existing"
+                });
+
             return Ok(categoryId);
         }
 
