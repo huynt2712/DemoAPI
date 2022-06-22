@@ -21,7 +21,7 @@ function displayListPost(data) {
   const tBody = document.getElementById("listPostIds");
   tBody.innerHTML = "";
 
-  data.forEach((post) => {
+  data.items.forEach((post) => {
     let tr = tBody.insertRow();
     let td1 = tr.insertCell(0);
     let textNode = document.createTextNode(post.title);
@@ -48,13 +48,13 @@ function displayListPost(data) {
 
     let td6 = tr.insertCell(4);
     textNode = document.createTextNode(
-      new Date(post.createdDate).toDateString()
+      post.createdDate ? new Date(post.createdDate).toDateString() : ""
     );
     td6.appendChild(textNode);
 
     let td7 = tr.insertCell(5);
     textNode = document.createTextNode(
-      post.updateDate ? "" : new Date(post.updateDate).toDateString()
+      post.updateDate ? new Date(post.updateDate).toDateString() : ""
     );
     td7.appendChild(textNode);
 
@@ -97,13 +97,13 @@ function addPost() {
   const addDescriptionTextBox = document.getElementById("add-description");
   const addContentTextBox = document.getElementById("add-content");
   const addSlugTextBox = document.getElementById("add-slug");
-  const addCategorySelect = document.getElementById('add-category');
+  const addCategorySelect = document.getElementById("add-category");
 
   if (!addTitleTextBox) return;
   if (!addDescriptionTextBox) return;
   if (!addContentTextBox) return;
   if (!addSlugTextBox) return;
-  if(!addCategorySelect) return;
+  if (!addCategorySelect) return;
 
   let title = addTitleTextBox.value.trim();
   if (title === "") {
@@ -131,8 +131,6 @@ function addPost() {
     return;
   }
 
- 
-
   let slug = addSlugTextBox.value.trim();
   if (slug === "") {
     let slugErrorElement = document.getElementById("post_slug_error");
@@ -147,7 +145,7 @@ function addPost() {
     content: content,
     slug: addSlugTextBox.value.trim(),
     imagepath: imagePath,
-    postCategoryId: addCategorySelect.value
+    postCategoryId: addCategorySelect.value,
   };
 
   fetch(`${postUrl}`, {
@@ -186,23 +184,31 @@ function displayEditForm(postId) {
 
   document.getElementById("edit-title").value = post.title;
   document.getElementById("edit-description").value = post.description;
-  document.getElementById("edit-content").value = post.content;
+  CKEDITOR.instances["edit-content"].setData(post.content);
   document.getElementById("edit-id").value = post.id;
+  document.getElementById("edit-slug").value = post.slug;
+  document.getElementById("edit-category").value = post.postCategoryId;
+  let imgFileUploadElement = document.getElementById("imgFileUploadEdit");
+  imgFileUploadElement.style.display = "block";
+  imgFileUploadElement.src = `https://localhost:7213/${post.imagePath}`;
   document.getElementById("editForm").style.display = "block";
 }
 
 function updatePost() {
   const postId = document.getElementById("edit-id").value;
+  let imgFileUploadElement = document.getElementById("imgFileUploadEdit");
+  const imagePath = imgFileUploadElement.dataset.path;
   const TitleEditTextBox = document.getElementById("edit-title");
   const DescriptionEditTextBox = document.getElementById("edit-description");
   const ContentEditTextBox = document.getElementById("edit-content");
   const SlugEditTextBox = document.getElementById("edit-slug");
+  const addCategorySelect = document.getElementById("edit-category");
 
   let titleEditErrorElement = document.getElementById("postedit_title_error");
   let descriptionEditErrorElement = document.getElementById(
     "postedit_description_error"
   );
-  let ContentEditErrorElement = document.getElementById(
+  let contentEditErrorElement = document.getElementById(
     "postedit_content_error"
   );
   let slugEditErrorElement = document.getElementById("postedit_slug_error");
@@ -221,10 +227,10 @@ function updatePost() {
     return;
   }
 
-  let contentEdit = ContentEditTextBox.value.trim();
+  let contentEdit = editContentEditor.getData();
   if (contentEdit === "") {
     if (!contentEditErrorElement) return;
-    contentEditErrorElement.innerHTML = "Title can not be empty";
+    contentEditErrorElement.innerHTML = "Content can not be empty";
     return;
   }
 
@@ -235,16 +241,25 @@ function updatePost() {
     return;
   }
 
-  fetch(`${postUrl}/${categoryId}`, {
+  const post = {
+    title: TitleEditTextBox.value.trim(),
+    description: DescriptionEditTextBox.value.trim(),
+    content: contentEdit,
+    slug: SlugEditTextBox.value.trim(),
+    imagePath: imagePath,
+    postCategoryId: addCategorySelect.value,
+  };
+
+  fetch(`${postUrl}/${postId}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(category),
+    body: JSON.stringify(post),
   })
     .then(() => getListPost())
-    .catch((error) => console.error("Unable to update category", error));
+    .catch((error) => console.error("Unable to update post", error));
 
   closeInput();
 }
@@ -287,10 +302,7 @@ function setupPagintion(data) {
     let itemElement = document.createElement("a");
     itemElement.innerHTML = `&laquo;`;
     itemElement.classList.add("w3-button", `pageNumber_${currentPage - 1}`);
-    itemElement.setAttribute(
-      "onclick",
-      `paginationCategory(${currentPage - 1})`
-    );
+    itemElement.setAttribute("onclick", `paginationPost(${currentPage - 1})`);
     postPaginationElement.append(itemElement);
   }
 
@@ -342,21 +354,62 @@ function uploadFile() {
     });
 }
 
+function uploadFileEdit() {
+  let fileUploadElement = document.getElementById("edit-image");
+  if (!fileUploadElement) return;
+
+  let formData = new FormData();
+  formData.append("file", fileUploadElement.files[0]);
+  const postUrl = "https://localhost:7213/api/File";
+
+  fetch(postUrl, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      let imgFileUploadElement = document.getElementById("imgFileUploadEdit");
+      if (!imgFileUploadElement) return;
+
+      imgFileUploadElement.style.display = "block";
+      imgFileUploadElement.src = `https://localhost:7213/${data.path}`;
+      imgFileUploadElement.dataset.path = data.path;
+    });
+}
+
 function getListCategory(searchText = "") {
   fetch(
     `${categoryUrl}?SearchText=${searchText}&PageNumber=${1}&PageSize=${10}`
   )
     .then((response) => response.json())
     .then((data) => {
-      let categorySelectElement = document.getElementById('add-category');
-      if(!categorySelectElement) return;
+      let categorySelectElement = document.getElementById("add-category");
+      if (!categorySelectElement) return;
 
       data.items.forEach((category) => {
         let option = document.createElement("option");
         option.text = category.name;
         option.value = category.id;
         categorySelectElement.add(option);
-      })
+      });
+    })
+    .catch((error) => console.error("Unable to get category list.", error));
+}
+function getListEditCategory(searchText = "") {
+  fetch(
+    `${categoryUrl}?SearchText=${searchText}&PageNumber=${1}&PageSize=${10}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      let categoryEditSelectElement = document.getElementById("edit-category");
+      if (!categoryEditSelectElement) return;
+
+      data.items.forEach((category) => {
+        let option = document.createElement("option");
+        option.text = category.name;
+        option.value = category.id;
+        categoryEditSelectElement.add(option);
+      });
     })
     .catch((error) => console.error("Unable to get category list.", error));
 }
@@ -365,5 +418,7 @@ getListPost();
 searchPost();
 closeInput();
 getListCategory();
+getListEditCategory();
 
-let contentEditor = CKEDITOR.replace('add-content');
+let contentEditor = CKEDITOR.replace("add-content");
+let editContentEditor = CKEDITOR.replace("edit-content");

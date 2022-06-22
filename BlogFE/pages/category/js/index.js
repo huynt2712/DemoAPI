@@ -32,13 +32,13 @@ function displayListCategory(data) {
 
     let td3 = tr.insertCell(2);
     textNode = document.createTextNode(
-      new Date(category.createAt).toDateString()
+      category.createAt ? new Date(category.createAt).toDateString() : ""
     );
     td3.appendChild(textNode);
 
     let td4 = tr.insertCell(3);
     textNode = document.createTextNode(
-      category.updateAt ? "" : new Date(category.updateAt).toDateString()
+      category.updateAt ? new Date(category.updateAt).toDateString() : ""
     );
     td4.appendChild(textNode);
 
@@ -125,10 +125,10 @@ function addCategory() {
     body: JSON.stringify(category),
   })
     .then((response) => {
-      if(!response.ok){
-        response.json().then(errorObj => {
+      if (!response.ok) {
+        response.json().then((errorObj) => {
           console.log(errorObj);
-          switch(errorObj.errorCode){
+          switch (errorObj.errorCode) {
             case "1001":
               nameErrorElement.innerHTML = errorObj.errorMessage;
               break;
@@ -136,17 +136,15 @@ function addCategory() {
               nameErrorElement.innerHTML = errorObj.errorMessage;
               break;
             case "1003":
-                slugErrorElement.innerHTML = errorObj.errorMessage;
-                break;
+              slugErrorElement.innerHTML = errorObj.errorMessage;
+              break;
             case "1004":
               nameErrorElement.innerHTML = errorObj.errorMessage;
               break;
           }
-        })
+        });
         return;
-      }
-      else
-      {
+      } else {
         addNameTextBox.value = "";
         addSlugTextBox.value = "";
         getListCategory();
@@ -298,7 +296,6 @@ activeCategoryTab();
 getListCategory();
 searchCategory();
 closeInput();
-
 
 /*
 Validation

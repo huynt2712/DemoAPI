@@ -1,5 +1,6 @@
 ﻿using BlogWebApi.Data;
 using BlogWebApi.Entites;
+using BlogWebApi.Helper;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Post;
@@ -17,10 +18,9 @@ namespace BlogWebApi.Services
             _blogDBContext = blogDBContext;
         }
 
-        public async Task <List<PostViewModel>> GetAllPostAsync(PostRequestModel postRequestModel)
+        public async Task <PagedList<PostViewModel>> GetAllPostAsync(PostRequestModel postRequestModel)
         {
-            var post = new List<PostViewModel>();
-            post = await _blogDBContext.Posts.Select(p => new PostViewModel
+            var post = _blogDBContext.Posts.Select(p => new PostViewModel
             {
                 Id = p.Id,
                 Content = p.Content,
@@ -29,9 +29,23 @@ namespace BlogWebApi.Services
                 Description = p.Description,
                 Title = p.Title,
                 Slug = p.Slug,
-                ImagePath = p.ImagePath
-            }).ToListAsync();
-            return post;
+                ImagePath = p.ImagePath,
+                PostCategoryId = p.PostCategoryId
+            });
+
+            if (!string.IsNullOrWhiteSpace(postRequestModel.SearchText))
+            {
+                var searchText = postRequestModel.SearchText.ToLower();
+                post = post.Where(p => (p.Title != null
+                && p.Title.ToLower().Contains(searchText))
+                || (p.Description != null && p.Description.ToLower().Contains(searchText))
+                || (p.Content != null && p.Content.ToLower().Contains(searchText))
+                || (p.Slug != null && p.Slug.ToLower().Contains(searchText)));
+            }
+
+            post = post.OrderBy(p => p.Title);
+            return await PagedList<PostViewModel>.ToPagedListAsync(post,
+                postRequestModel.PageNumber, postRequestModel.PageSize);
         }
 
         public async Task <int?> AddPostAsync(AddPostViewModel addPostViewModel)
@@ -40,6 +54,12 @@ namespace BlogWebApi.Services
             var category = await _blogDBContext.Categories
                 .FirstOrDefaultAsync(c => c.Id == addPostViewModel.PostCategoryId);
             if (category == null)
+                return -2;
+
+            var isExisting = await _blogDBContext.Posts
+               .AnyAsync(p => p.Title == addPostViewModel.Title || p.Description == addPostViewModel.Description
+               || p.Content == addPostViewModel.Content || p.Slug == addPostViewModel.Slug);
+            if (isExisting)
                 return -1;
 
             var newPost = await _blogDBContext.Posts.AddAsync(new Post

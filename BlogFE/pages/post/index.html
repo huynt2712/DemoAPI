@@ -193,7 +193,7 @@
             type="text"
             id="add-content"
             placeholder="content"
-          ></textarea> 
+          ></textarea>
           <span class="w3-red" id="post_content_error"></span>
         </p>
         <p>
@@ -232,7 +232,7 @@
         </p>
         <p>
           <label><b>Category</b></label>
-          <select id="add-category" class="w3-input postInput" ></select>
+          <select id="add-category" class="w3-input postInput"></select>
         </p>
         <input
           class="w3-button w3-white w3-border w3-round-large"
@@ -283,7 +283,7 @@
           class="w3-container"
           action="javascript:void(0);"
           method="PUT"
-          onsubmit="updateCategory()"
+          onsubmit="updatePost()"
         >
           <h3>Edit</h3>
           <input
@@ -313,12 +313,12 @@
           </p>
           <p>
             <label><b>Content</b></label>
-            <input
+            <textarea
               class="w3-input w3-border postInput"
               type="text"
               id="edit-content"
               placeholder="content"
-            />
+            ></textarea>
             <span class="w3-red" id="postedit_content_error"></span>
           </p>
           <p>
@@ -332,8 +332,26 @@
             <span class="w3-red" id="postedit_slug_error"></span>
           </p>
           <p>
+            <label><b>Image</b></label>
+            <input
+              class="w3-input w3-border postInput"
+              type="file"
+              id="edit-image"
+              placeholder="image"
+            />
+            <img width="100px" height="100px" id="imgFileUploadEdit" hidden />
+            <br />
+            <input
+              type="button"
+              class="w3-button w3-white w3-border w3-round"
+              value="Upload File"
+              id="btn_uploadEdit"
+              onclick="uploadFileEdit()"
+            />
+          </p>
+          <p>
             <label><b>Category</b></label>
-            <select id="edit-category"></select>
+            <select id="edit-category" class="w3-input postInput"></select>
           </p>
           <input
             class="w3-button w3-white w3-border w3-round-large"

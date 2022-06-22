@@ -4,6 +4,7 @@ using BlogWebApi.Entites;
 using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Post;
+using BlogWebApi.ViewModel.Common;
 
 namespace BlogWebApi.Controllers
 {
@@ -44,10 +45,61 @@ namespace BlogWebApi.Controllers
         public async Task <IActionResult> PostAsync([FromBody] AddPostViewModel post)
         {
             if (post == null)
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1001",
+                    ErrorMessage = "Post can not be null"
+                });
+
+            if (string.IsNullOrWhiteSpace(post.Title))
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1002",
+                    ErrorMessage = "Title can not be empty"
+                });
+
+            if (string.IsNullOrWhiteSpace(post.Description))
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1003",
+                    ErrorMessage = "Description can not be empty"
+                });
+
+            if (string.IsNullOrWhiteSpace(post.Content))
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1004",
+                    ErrorMessage = "Content can not be empty"
+                });
+
+            if (string.IsNullOrWhiteSpace(post.Slug))
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1006",
+                    ErrorMessage = "Slug can not be empty"
+                });
+
+            var newPost = await _postService.AddPostAsync(post);
+
+            if (newPost == -2)
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1005",
+                    ErrorMessage = "Category is not exist"
+                });
+            if (newPost == -1)
+            {
+                return BadRequest(new ErrorReturnModel
+                {
+                    ErrorCode = "1007",
+                    ErrorMessage = "Post is exist"
+                });
+            }
+
+            if (post == null)
             {
                 return BadRequest("Post is null.");
             }
-            var newPost = await _postService.AddPostAsync(post);
             return Ok(newPost);
         }
 

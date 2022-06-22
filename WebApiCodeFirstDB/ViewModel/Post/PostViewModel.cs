@@ -17,5 +17,7 @@
         public DateTime? CreatedDate { get; set; }
 
         public DateTime? UpdateDate { get; set; }
+
+        public int PostCategoryId { get; set; }
     }
 }
