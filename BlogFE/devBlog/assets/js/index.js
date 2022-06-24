@@ -3,7 +3,22 @@ let listPost = [];
 let currentPage = 1;
 let pageSize = 1;
 
-function getPostCategoryList() {
+function renderTemplateHtml()
+{
+  const postTemplate = document.getElementById('postTemplate');
+   if(!postTemplate) return;
+
+   const postElement = postTemplate.content.firstElementChild.cloneNode(true);
+
+   const postListElement = document.getElementById('postList');
+   if(!postListElement) return;
+
+   postListElement.appendChild(postElement);
+}
+
+renderTemplateHtml();
+
+function getPostList() {
   const url = "https://localhost:7213/api/Post";
   //const ulElement = document.getElementById("posts");
 
@@ -73,4 +88,4 @@ function renderPostList(postList, ulElementId) {
   }
 }
 
-getPostCategoryList();
+// getPostList();

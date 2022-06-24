@@ -2,7 +2,7 @@ const postUrl = "https://localhost:7213/api/Post";
 const categoryUrl = "https://localhost:7213/api/Category";
 let listPost = [];
 let currentPage = 1;
-let pageSize = 1;
+let pageSize = 3;
 
 function getListPost(searchText = "") {
   fetch(
@@ -12,6 +12,7 @@ function getListPost(searchText = "") {
     .then((data) => {
       displayListPost(data);
 
+      currentPage = data.currentPage;
       if (data.totalPages > 0) setupPagintion(data);
     })
     .catch((error) => console.error("Unable to get post list.", error));
@@ -80,7 +81,7 @@ function displayListPost(data) {
       "w3-border",
       "w3-round-large"
     );
-    deletetButton.setAttribute("onclick", `deleteCategory(${post.id})`);
+    deletetButton.setAttribute("onclick", `deletePost(${post.id})`);
 
     let td9 = tr.insertCell(7);
     td9.appendChild(deletetButton);
@@ -167,8 +168,8 @@ function addPost() {
     .catch((error) => console.error("Unable to add post", error));
 }
 
-function deleteCategory(categoryId) {
-  fetch(`${postUrl}/${categoryId}`, {
+function deletePost(postId) {
+  fetch(`${postUrl}/${postId}`, {
     method: "DELETE",
   })
     .then(() => getListPost())
@@ -287,6 +288,7 @@ function searchPost() {
     searchPostElement.addEventListener("keyup", () => {
       delay(function () {
         let searchPostValue = searchPostElement.value.toLowerCase();
+        if(searchPostValue) currentPage = 1;
         getListPost(searchPostValue);
       }, 1000);
     });
@@ -328,7 +330,11 @@ function setupPagintion(data) {
 
 function paginationPost(pageNumber) {
   currentPage = pageNumber;
-  getListPost();
+  let searchPostElement = document.getElementById("searchPost");
+  if(searchPostElement) {
+    let searchPostValue = searchPostElement.value.toLowerCase();
+    getListPost(searchPostValue);
+  }
 }
 
 function uploadFile() {

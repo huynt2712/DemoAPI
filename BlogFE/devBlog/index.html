@@ -135,56 +135,60 @@
         </div>
         <!--//container-->
       </section>
-      <section class="blog-list px-3 py-5 p-md-5">
-        <div class="container">
-          <div class="item mb-5">
-            <div class="media">
-              <img
-                class="mr-3 img-fluid post-thumb d-none d-md-flex"
-                id="img-post"
-                src=""
-                alt="image"
-              />
-              <div class="media-body">
-                <h3 class="title mb-1">
-                  <a href="blog-post.html" id="post-title"
-                    >Why Every Developer Should Have A Blog</a
-                  >
-                </h3>
-                <div class="meta mb-1">
-                  <span class="date">Published 2 days ago</span
-                  ><span class="time">5 min read</span
-                  ><span class="comment"><a href="#">8 comments</a></span>
+      <div id="postList">
+      <template id="postTemplate">
+        <section class="blog-list px-3 py-5 p-md-5">
+          <div class="container">
+            <div class="item mb-5">
+              <div class="media">
+                <img
+                  class="mr-3 img-fluid post-thumb d-none d-md-flex"
+                  id="img-post"
+                  src=""
+                  alt="image"
+                />
+                <div class="media-body">
+                  <h3 class="title mb-1">
+                    <a href="blog-post.html" id="post-title"
+                      >Why Every Developer Should Have A Blog</a
+                    >
+                  </h3>
+                  <div class="meta mb-1">
+                    <span class="date">Published 2 days ago</span
+                    ><span class="time">5 min read</span
+                    ><span class="comment"><a href="#">8 comments</a></span>
+                  </div>
+                  <div class="intro" id="post-description">
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
+                    natoque penatibus et magnis dis parturient montes, nascetur
+                    ridiculus mus. Donec quam felis, ultricies...
+                  </div>
+                  <a class="more-link" href="blog-post.html">Read more &rarr;</a>
                 </div>
-                <div class="intro" id="post-description">
-                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                  Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                  natoque penatibus et magnis dis parturient montes, nascetur
-                  ridiculus mus. Donec quam felis, ultricies...
-                </div>
-                <a class="more-link" href="blog-post.html">Read more &rarr;</a>
+
+                <!--//media-body-->
               </div>
-
-              <!--//media-body-->
+              <!--//media-->
             </div>
-            <!--//media-->
-          </div>
-          <!--//item-->
+            <!--//item-->
 
-          <nav class="blog-nav nav nav-justified my-5">
-            <a
-              class="nav-link-prev nav-item nav-link d-none rounded-left"
-              href="#"
-              >Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i
-            ></a>
-            <a
-              class="nav-link-next nav-item nav-link rounded"
-              href="blog-list.html"
-              >Next<i class="arrow-next fas fa-long-arrow-alt-right"></i
-            ></a>
-          </nav>
-        </div>
-      </section>
+            <nav class="blog-nav nav nav-justified my-5">
+              <a
+                class="nav-link-prev nav-item nav-link d-none rounded-left"
+                href="#"
+                >Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i
+              ></a>
+              <a
+                class="nav-link-next nav-item nav-link rounded"
+                href="blog-list.html"
+                >Next<i class="arrow-next fas fa-long-arrow-alt-right"></i
+              ></a>
+            </nav>
+          </div>
+        </section>
+      </template>
+      </div>
 
       <footer class="footer text-center py-2 theme-bg-dark">
         <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->

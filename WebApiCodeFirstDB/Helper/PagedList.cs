@@ -32,7 +32,10 @@ namespace BlogWebApi.Helper
             int pageSize)
         {
             var count = source.Count();
-            var items = await source.Skip((pageNumber - 1) * pageSize)
+            var totalPages = (int)Math.Ceiling(count * 1.0 / pageSize); //5 items => 2 pages
+            if (pageNumber > totalPages) pageNumber = totalPages; 
+
+            var items = await source.Skip((pageNumber - 1) * pageSize) //3-1 = 2 * 3 = 6 skip(6) 
                 .Take(pageSize)
                 .ToListAsync();
 
