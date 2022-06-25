@@ -15,6 +15,7 @@ function renderTemplateHtml(post) {
 
   const titleElement = postElement.querySelector("#post-title");
   titleElement.textContent = post.title;
+  titleElement.href = `blog-post.html?id=${post.id}`;
 
   const descriptionElement = postElement.querySelector("#post-description");
   descriptionElement.textContent = post.description;
