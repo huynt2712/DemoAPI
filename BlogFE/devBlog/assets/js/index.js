@@ -1,9 +1,9 @@
 const postUrl = "https://localhost:7213/api/Post";
 let listPost = [];
 let currentPage = 1;
-let pageSize = 2;
+let pageSize = 3;
 
-function renderTemplateHtml(post) {
+function renderTemplateHtml(postListElement, post) {
   const postTemplate = document.getElementById("postTemplate");
   if (!postTemplate) return;
 
@@ -15,24 +15,26 @@ function renderTemplateHtml(post) {
 
   const titleElement = postElement.querySelector("#post-title");
   titleElement.textContent = post.title;
+  titleElement.href = `blog-post.html?id=${post.id}`;
 
   const descriptionElement = postElement.querySelector("#post-description");
   descriptionElement.textContent = post.description;
-
-  const postListElement = document.getElementById("postList");
-  if (!postListElement) return;
 
   postListElement.appendChild(postElement);
 }
 
 function getListPost(searchText = "") {
+  const postListElement = document.getElementById("postList");
+  if (!postListElement) return;
+  postListElement.innerHTML = '';
+
   fetch(
     `${postUrl}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`
   )
     .then((response) => response.json()) //=> arrow function
     .then((data) => {
       data.items.forEach((post) => {
-        renderTemplateHtml(post);
+        renderTemplateHtml(postListElement, post);
       });
 
       currentPage = data.currentPage;
@@ -70,13 +72,21 @@ function setupPagintion(data) {
     let itemElement = document.createElement("a");
     itemElement.innerHTML = "Prevous";
     itemElement.classList.add(
-      "nav-link-prevous",
+      "nav-link-prev",
       "nav-item",
       "nav-link",
       "rounded-left",
       `pageNumber_${currentPage - 1}`
     );
     itemElement.setAttribute("onclick", `paginationPost(${currentPage - 1})`);
+    itemElement.href = '';
+    let iconElement = document.createElement('i');
+    iconElement.classList.add(
+      'arrow-prev',
+      'fas',
+      'fa-long-arrow-alt-left'
+    );
+    itemElement.appendChild(iconElement);
     postPaginationElement.append(itemElement);
   }
 
@@ -102,6 +112,13 @@ function setupPagintion(data) {
       `pageNumber_${currentPage + 1}`
     );
     itemElement.setAttribute("onclick", `paginationPost(${currentPage + 1})`);
+    let iconElement = document.createElement('i');
+    iconElement.classList.add(
+      'arrow-next',
+      'fas',
+      'fa-long-arrow-alt-right'
+    );
+    itemElement.appendChild(iconElement);
     postPaginationElement.append(itemElement);
   }
 

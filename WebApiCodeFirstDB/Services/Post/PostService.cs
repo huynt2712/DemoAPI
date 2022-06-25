@@ -43,7 +43,7 @@ namespace BlogWebApi.Services
                 || (p.Slug != null && p.Slug.ToLower().Contains(searchText)));
             }
 
-            post = post.OrderBy(p => p.Title);
+            post = post.OrderBy(p => p.Title); //created date/update date
             return await PagedList<PostViewModel>.ToPagedListAsync(post,
                 postRequestModel.PageNumber, postRequestModel.PageSize);
         }

@@ -256,6 +256,7 @@ function updatePost() {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      "Authorization": 'basic afwefsadfsafdsa'
     },
     body: JSON.stringify(post),
   })
