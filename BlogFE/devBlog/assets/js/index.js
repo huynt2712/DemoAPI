@@ -1,22 +1,45 @@
-//const postUrl = "https://localhost:7213/api/Post";
+const postUrl = "https://localhost:7213/api/Post";
 let listPost = [];
 let currentPage = 1;
-let pageSize = 1;
+let pageSize = 2;
 
-function renderTemplateHtml()
-{
-  const postTemplate = document.getElementById('postTemplate');
-   if(!postTemplate) return;
+function renderTemplateHtml(post) {
+  const postTemplate = document.getElementById("postTemplate");
+  if (!postTemplate) return;
 
-   const postElement = postTemplate.content.firstElementChild.cloneNode(true);
+  const postElement = postTemplate.content.firstElementChild.cloneNode(true);
+  postElement.dataset.id = post.id;
 
-   const postListElement = document.getElementById('postList');
-   if(!postListElement) return;
+  const imageElement = postElement.querySelector("#img-post");
+  imageElement.src = `https://localhost:7213/${post.imagePath}`;
 
-   postListElement.appendChild(postElement);
+  const titleElement = postElement.querySelector("#post-title");
+  titleElement.textContent = post.title;
+
+  const descriptionElement = postElement.querySelector("#post-description");
+  descriptionElement.textContent = post.description;
+
+  const postListElement = document.getElementById("postList");
+  if (!postListElement) return;
+
+  postListElement.appendChild(postElement);
 }
 
-renderTemplateHtml();
+// function getListPost(searchText = "") {
+//   fetch(
+//     `${postUrl}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`
+//   )
+//     .then((response) => response.json()) //=> arrow function
+//     .then((data) => {
+//       renderTemplateHtml(data);
+
+//       currentPage = data.currentPage;
+//       if (data.totalPages > 0) setupPagintion(data);
+//     })
+//     .catch((error) => console.error("Unable to get post list.", error));
+// }
+
+//renderTemplateHtml();
 
 function getPostList() {
   const url = "https://localhost:7213/api/Post";
@@ -27,65 +50,55 @@ function getPostList() {
       return response.json();
     })
     .then((data) => {
-      displayListPost(data);
+      data.items.forEach((post) => {
+        renderTemplateHtml(post);
+      });
     })
     .catch(function (error) {
       console.log(error);
     });
 }
 
-function displayListPost(data) {
-  data.items.forEach((post) => {
-    const imageElement = document.getElementById("img-post");
-    imageElement.src = `https://localhost:7213/${post.imagePath}`;
+// function setupPagintion(data) {
+//   let postPaginationElement = document.getElementById("post_pagination");
+//   if (!postPaginationElement) return;
 
-    const titleElement = document.getElementById("post-title");
-    titleElement.textContent = post.title;
+//   postPaginationElement.innerHTML = "";
+//   if (data.hasPrevious) {
+//     let itemElement = document.createElement("a");
+//     itemElement.innerHTML = `&laquo;`;
+//     itemElement.classList.add("w3-button", `pageNumber_${currentPage - 1}`);
+//     itemElement.setAttribute("onclick", `paginationPost(${currentPage - 1})`);
+//     postPaginationElement.append(itemElement);
+//   }
 
-    const descriptionElement = document.getElementById("post-description");
-    descriptionElement.textContent = post.description;
-  });
-}
+//   for (let pageNumber = 0; pageNumber < data.totalPages; pageNumber++) {
+//     itemElement = document.createElement("a");
+//     itemElement.classList.add("w3-button", `pageNumber_${pageNumber + 1}`);
+//     itemElement.innerHTML = pageNumber + 1;
+//     itemElement.setAttribute("onclick", `paginationPost(${pageNumber + 1})`);
+//     postPaginationElement.append(itemElement);
+//   }
 
-function createPostElement(post) {
-  if (!post) return null;
+//   if (data.hasNext) {
+//     let itemElement = document.createElement("a");
+//     itemElement.innerHTML = `&raquo;`;
+//     itemElement.classList.add("w3-button", `pageNumber_${currentPage + 1}`);
+//     itemElement.setAttribute("onclick", `paginationPost(${currentPage + 1})`);
+//     postPaginationElement.append(itemElement);
+//   }
 
-  const postTemplate = document.getElementById("postTemplate");
-  if (!postTemplate) return;
+//   let currentPageElement = document.querySelector(`.pageNumber_${currentPage}`);
+//   currentPageElement.classList.add("w3-green");
+// }
 
-  //const postElement = postTemplate.content.firstElementChild.cloneNode(true);
-  //console.log(postElement);
-  //postElement.dataset.id = post.id;
+// function paginationPost(pageNumber) {
+//   currentPage = pageNumber;
+//   let searchPostElement = document.getElementById("searchPost");
+//   if (searchPostElement) {
+//     let searchPostValue = searchPostElement.value.toLowerCase();
+//     getListPost(searchPostValue);
+//   }
+// }
 
-  const imageElement = post.querySelector("#post-image");
-  if (imageElement) imageElement.src = post.image;
-  console.log(imageElement);
-
-  //   const titleElement = postElement.querySelector(".post-title");
-  //   if (titleElement) titleElement.textContent = post.title;
-
-  //   const contentElement = postElement.querySelector(".post-content");
-  //   if (contentElement) contentElement.textContent = post.content;
-
-  //return postElement;
-}
-
-function renderPostList(postList, ulElementId) {
-  if (!Array.isArray(postList) || postList.length === 0) return;
-  console.log(postList);
-  console.log(ulElementId);
-
-  //find ul element
-  //loop categoryList
-  //each category => create li element => append li into ul
-  const ulElement = document.getElementById(ulElementId);
-  if (!ulElement) return;
-
-  for (const post of postList) {
-    console.log(post);
-    const liElement = createPostElement(post);
-    ulElement.appendChild(liElement);
-  }
-}
-
-// getPostList();
+getPostList();
