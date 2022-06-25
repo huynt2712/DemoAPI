@@ -25,80 +25,99 @@ function renderTemplateHtml(post) {
   postListElement.appendChild(postElement);
 }
 
-// function getListPost(searchText = "") {
-//   fetch(
-//     `${postUrl}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`
-//   )
-//     .then((response) => response.json()) //=> arrow function
-//     .then((data) => {
-//       renderTemplateHtml(data);
-
-//       currentPage = data.currentPage;
-//       if (data.totalPages > 0) setupPagintion(data);
-//     })
-//     .catch((error) => console.error("Unable to get post list.", error));
-// }
-
-//renderTemplateHtml();
-
-function getPostList() {
-  const url = "https://localhost:7213/api/Post";
-  //const ulElement = document.getElementById("posts");
-
-  fetch(url)
-    .then((response) => {
-      return response.json();
-    })
+function getListPost(searchText = "") {
+  fetch(
+    `${postUrl}?SearchText=${searchText}&PageNumber=${currentPage}&PageSize=${pageSize}`
+  )
+    .then((response) => response.json()) //=> arrow function
     .then((data) => {
       data.items.forEach((post) => {
         renderTemplateHtml(post);
       });
+
+      currentPage = data.currentPage;
+      if (data.totalPages > 0) setupPagintion(data);
     })
-    .catch(function (error) {
-      console.log(error);
-    });
+    .catch((error) => console.error("Unable to get post list.", error));
 }
 
-// function setupPagintion(data) {
-//   let postPaginationElement = document.getElementById("post_pagination");
-//   if (!postPaginationElement) return;
+//renderTemplateHtml();
 
-//   postPaginationElement.innerHTML = "";
-//   if (data.hasPrevious) {
-//     let itemElement = document.createElement("a");
-//     itemElement.innerHTML = `&laquo;`;
-//     itemElement.classList.add("w3-button", `pageNumber_${currentPage - 1}`);
-//     itemElement.setAttribute("onclick", `paginationPost(${currentPage - 1})`);
-//     postPaginationElement.append(itemElement);
-//   }
+// function getPostList() {
+//   const url = "https://localhost:7213/api/Post";
+//   //const ulElement = document.getElementById("posts");
 
-//   for (let pageNumber = 0; pageNumber < data.totalPages; pageNumber++) {
-//     itemElement = document.createElement("a");
-//     itemElement.classList.add("w3-button", `pageNumber_${pageNumber + 1}`);
-//     itemElement.innerHTML = pageNumber + 1;
-//     itemElement.setAttribute("onclick", `paginationPost(${pageNumber + 1})`);
-//     postPaginationElement.append(itemElement);
-//   }
-
-//   if (data.hasNext) {
-//     let itemElement = document.createElement("a");
-//     itemElement.innerHTML = `&raquo;`;
-//     itemElement.classList.add("w3-button", `pageNumber_${currentPage + 1}`);
-//     itemElement.setAttribute("onclick", `paginationPost(${currentPage + 1})`);
-//     postPaginationElement.append(itemElement);
-//   }
-
-//   let currentPageElement = document.querySelector(`.pageNumber_${currentPage}`);
-//   currentPageElement.classList.add("w3-green");
+//   fetch(url)
+//     .then((response) => {
+//       return response.json();
+//     })
+//     .then((data) => {
+//       data.items.forEach((post) => {
+//         renderTemplateHtml(post);
+//       });
+//     })
+//     .catch(function (error) {
+//       console.log(error);
+//     });
 // }
 
-// function paginationPost(pageNumber) {
-//   currentPage = pageNumber;
-//   let searchPostElement = document.getElementById("searchPost");
-//   if (searchPostElement) {
-//     let searchPostValue = searchPostElement.value.toLowerCase();
-//     getListPost(searchPostValue);
-//   }
-// }
+function setupPagintion(data) {
+  let postPaginationElement = document.getElementById("post_pagination");
+  if (!postPaginationElement) return;
 
-getPostList();
+  postPaginationElement.innerHTML = "";
+  if (data.hasPrevious) {
+    let itemElement = document.createElement("a");
+    itemElement.innerHTML = "Prevous";
+    itemElement.classList.add(
+      "nav-link-prevous",
+      "nav-item",
+      "nav-link",
+      "rounded-left",
+      `pageNumber_${currentPage - 1}`
+    );
+    itemElement.setAttribute("onclick", `paginationPost(${currentPage - 1})`);
+    postPaginationElement.append(itemElement);
+  }
+
+  // for (let pageNumber = 0; pageNumber < data.totalPages; pageNumber++) {
+  //   itemElement = document.createElement("a");
+  //   itemElement.classList.add(
+  //     "nav-link-prev nav-item nav-link rounded-left",
+  //     `pageNumber_${pageNumber + 1}`
+  //   );
+  //   itemElement.innerHTML = pageNumber + 1;
+  //   itemElement.setAttribute("onclick", `paginationPost(${pageNumber + 1})`);
+  //   postPaginationElement.append(itemElement);
+  // }
+
+  if (data.hasNext) {
+    let itemElement = document.createElement("a");
+    itemElement.innerHTML = "Next";
+    itemElement.classList.add(
+      "nav-link-next",
+      "nav-item",
+      "nav-link",
+      "rounded-right",
+      `pageNumber_${currentPage + 1}`
+    );
+    itemElement.setAttribute("onclick", `paginationPost(${currentPage + 1})`);
+    postPaginationElement.append(itemElement);
+  }
+
+  // let currentPageElement = document.querySelector(`.pageNumber_${currentPage}`);
+  // currentPageElement.classList.add("w3-green");
+}
+
+function paginationPost(pageNumber) {
+  currentPage = pageNumber;
+  // let searchPostElement = document.getElementById("searchPost");
+  // if (searchPostElement) {
+  //   let searchPostValue = searchPostElement.value.toLowerCase();
+
+  // }
+  getListPost();
+}
+
+//getPostList();
+getListPost();
