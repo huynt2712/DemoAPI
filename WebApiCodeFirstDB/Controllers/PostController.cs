@@ -5,6 +5,7 @@ using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Post;
 using BlogWebApi.ViewModel.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogWebApi.Controllers
 {
@@ -17,6 +18,7 @@ namespace BlogWebApi.Controllers
         {
             _postService = postService;
         }
+        [Authorize]
         [HttpGet]
         public async Task <IActionResult> GetAllAsync([FromQuery]PostRequestModel postRequestModel)
         {
@@ -34,6 +36,7 @@ namespace BlogWebApi.Controllers
             return Ok(post);
         }
 
+        
         //POST:api/Post
         [HttpPost]
         public async Task <IActionResult> PostAsync([FromBody] AddPostViewModel post)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using BlogWebApi.Entites;
+using BlogWebApi.Entties;
 
 namespace BlogWebApi.Data
 {
@@ -8,6 +9,7 @@ namespace BlogWebApi.Data
     {
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostCategory> Categories { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public BlogDBContext()
         {

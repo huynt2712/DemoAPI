@@ -6,6 +6,7 @@ using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Category;
 using Microsoft.EntityFrameworkCore;
 using BlogWebApi.ViewModel.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogWebApi.Controllers
 {
@@ -20,6 +21,7 @@ namespace BlogWebApi.Controllers
             _categoryService = categoryService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetsAsync([FromQuery]CategoryRequestModel requestModel)
         {
@@ -27,6 +29,7 @@ namespace BlogWebApi.Controllers
             return Ok(postCategories);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
@@ -38,6 +41,7 @@ namespace BlogWebApi.Controllers
             return Ok(category);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] AddCategoryViewModel postCategory)
         {
@@ -75,6 +79,7 @@ namespace BlogWebApi.Controllers
             return Ok(categoryId);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(int id, [FromBody] UpdateCategoryViewModel updateCategory)
         {
@@ -91,6 +96,7 @@ namespace BlogWebApi.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

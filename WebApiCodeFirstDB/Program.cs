@@ -5,6 +5,11 @@ using BlogWebApi.Services;
 using BlogWebApi.Services.Interface;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
+using BlogWebApi.ViewModel.User;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
     
@@ -17,8 +22,57 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
-builder.Services.Configure<Course>(
-    builder.Configuration.GetSection("Course"));
+builder.Services.Configure<Course>(builder.Configuration.GetSection("Course"));
+builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSetting"));
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "My API",
+        Version = "v1"
+    });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT with Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+   {
+     new OpenApiSecurityScheme
+     {
+       Reference = new OpenApiReference
+       {
+         Type = ReferenceType.SecurityScheme,
+         Id = "Bearer"
+       }
+      },
+      new string[] { }
+    }
+  });
+});
+var secretKey = builder.Configuration["AppSetting:SecretKey"];
+var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(option =>
+    {
+        option.TokenValidationParameters = new TokenValidationParameters
+        {
+            //Nguoi cap phat token
+            ValidateIssuer = false, //indetity server 4, facebook, google
+            //Nguoi su dung
+            ValidateAudience = false,
+
+            //Chu ky
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes), //Thuat toan,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
 
 builder.Services.AddDbContext<BlogDBContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("BlogDbConnection")));
@@ -47,6 +101,8 @@ if (app.Environment.IsDevelopment()
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
