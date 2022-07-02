@@ -18,7 +18,7 @@ namespace BlogWebApi.Controllers
         {
             _postService = postService;
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task <IActionResult> GetAllAsync([FromQuery]PostRequestModel postRequestModel)
         {

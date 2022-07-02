@@ -1,6 +1,8 @@
 ﻿using BlogWebApi.Data;
 using BlogWebApi.Entties;
+using BlogWebApi.ViewModel.Common;
 using BlogWebApi.ViewModel.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +12,8 @@ using System.Text;
 
 namespace BlogWebApi.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UserController : Controller
     {
         private readonly AppSetting _appSetting;
@@ -24,23 +28,34 @@ namespace BlogWebApi.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody] LoginModel model)
         {
-            //= new List<User>(); //Get data from database
-            var userList = _blogDBContext.Users.Add(new User
-            {
-                UserName = model.UserName,
-                Password = model.Password,
-                Email = model.Email,
-                Name = model.Name,
-                Phone = model.Phone,
-            });
-            _blogDBContext.SaveChanges();
-
             var user = _blogDBContext.Users.Where(x => x.UserName == model.UserName
             && x.Password == model.Password).FirstOrDefault();
 
-            if (user == null) return NotFound();
+            if (user == null)
+                return Ok(new ApiResponseModel
+                {
+                    Message = "User Name or Password is incorrect. Please try again",
+                    IsSuccess = false
+                });
 
-            return Ok(GenerateToken(user)); //token
+            return Ok(new ApiResponseModel
+            {
+                Data = GenerateToken(user),//token
+                Message = "Login successfully",
+                IsSuccess = true
+            });
+        }
+
+        [Authorize]
+        [HttpGet("UserInfo")]
+        public IActionResult GetUserInfo()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var claims = identity?.Claims?.ToList();
+
+            if(claims != null)
+                return Ok(claims[0]?.Value);
+            return BadRequest();
         }
 
         private string GenerateToken(User user)

@@ -84,7 +84,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://127.0.0.1:5501")
+                          policy.WithOrigins("http://127.0.0.1:5501", "http://127.0.0.1:5500")
+                          .AllowCredentials()
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
@@ -102,15 +103,16 @@ if (app.Environment.IsDevelopment()
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 app.MapControllers();
 
 app.UseRouting();
 
 app.UseCors(MyAllowSpecificOrigins);
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 
 app.UseStaticFiles(new StaticFileOptions()
 {

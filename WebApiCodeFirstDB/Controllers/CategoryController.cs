@@ -21,7 +21,7 @@ namespace BlogWebApi.Controllers
             _categoryService = categoryService;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> GetsAsync([FromQuery]CategoryRequestModel requestModel)
         {
@@ -29,7 +29,7 @@ namespace BlogWebApi.Controllers
             return Ok(postCategories);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
