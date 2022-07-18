@@ -33,6 +33,18 @@ namespace BlogWebApi.Services
                 PostCategoryId = p.PostCategoryId
             });
 
+            //Iqueryable xử lý trên database
+            var queryableData = _blogDBContext.Posts.Where(p => p.Id == 1)
+                .Select(p => p.Content); //10000 items
+
+            //IEnumerable  xử lý trên bộ nhớ (RAM)
+            var enumerableData = queryableData.ToList();
+            //Iqueryable => IEnumerable
+            var queryEnumerableData = enumerableData.Where(p => p.Contains("x"))
+                .Select(x => x); //Xử lý ở bộ nhớ (RAM)
+
+
+
             if (!string.IsNullOrWhiteSpace(postRequestModel.SearchText))
             {
                 var searchText = postRequestModel.SearchText.ToLower();

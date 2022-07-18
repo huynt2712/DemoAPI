@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogWebApi", "WebApiCodeFir
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asynchronous_Synchronous", "Asynchronous_Synchronous\Asynchronous_Synchronous.csproj", "{28F6593E-0FE4-40ED-AE3F-0A84A5B3A25F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonWebToken", "JsonWebToken\JsonWebToken.csproj", "{1332B8AB-BAFB-419A-A870-FB132CD16842}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonWebToken", "JsonWebToken\JsonWebToken.csproj", "{1332B8AB-BAFB-419A-A870-FB132CD16842}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
