@@ -5,16 +5,23 @@ using BlogWebApi.Services.Interface;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Category;
 using Microsoft.EntityFrameworkCore;
+using BlogWebApi.Repository.Category;
+using BlogWebApi.UnitOfWork;
 
 namespace BlogWebApi.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly BlogDBContext _blogDBContext;
+        private readonly ICategoryRepository categoryRepository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public CategoryService(BlogDBContext blogDBContext)
+        public CategoryService(BlogDBContext blogDBContext, ICategoryRepository categoryRepository,
+            IUnitOfWork unitOfWork)
         {
             _blogDBContext = blogDBContext;
+            this.categoryRepository = categoryRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task<PagedList<CategoryViewModel>> GetsAsync(CategoryRequestModel requestModel)
@@ -69,14 +76,23 @@ namespace BlogWebApi.Services
             if (isExisting)
                 return -1;
 
-            var newCategory = await _blogDBContext.Categories.AddAsync(new PostCategory
+            var newCategory = await categoryRepository.AddAsync(new PostCategory
             {
                 Name = postCategory.Name,
                 Slug = postCategory.Slug,
-                CreateAt = DateTime.UtcNow 
+                CreateAt = DateTime.UtcNow
             });
-            await _blogDBContext.SaveChangesAsync();
-            return newCategory.Entity.Id;
+            await unitOfWork.SaveAsync();
+            //var newCategory = await _blogDBContext.Categories.AddAsync(new PostCategory
+            //{
+            //    Name = postCategory.Name,
+            //    Slug = postCategory.Slug,
+            //    CreateAt = DateTime.UtcNow 
+            //});
+            //await _blogDBContext.SaveChangesAsync();
+            if (newCategory == null) return -1;
+
+            return newCategory.Id;
         }
 
         public async Task<int> DeleteCategoryAsync(int id)
