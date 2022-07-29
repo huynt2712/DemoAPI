@@ -12,5 +12,6 @@ namespace BlogWebApi.Services.Interface
         Task <int?> AddPostAsync(AddPostViewModel addPostViewModel);
         Task <int> UpdatePostAsync(int id, UpdatePostViewModel updatePostViewModel);
         Task <int> DeletePostAsync(int id);
+        Task TestUnitOfWork();
     }
 }

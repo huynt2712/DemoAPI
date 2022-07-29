@@ -22,4 +22,8 @@
     <Folder Include="Resources\Images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DemoCodeFirstDB\DemoCodeFirstDB.csproj" />
+  </ItemGroup>
+
 </Project>

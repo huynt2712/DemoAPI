@@ -1,7 +1,9 @@
 ﻿using BlogWebApi.Data;
 using BlogWebApi.Entites;
 using BlogWebApi.Helper;
+using BlogWebApi.Repository;
 using BlogWebApi.Services.Interface;
+using BlogWebApi.UnitOfWork;
 using BlogWebApi.ViewModel;
 using BlogWebApi.ViewModel.Post;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +14,18 @@ namespace BlogWebApi.Services
     public class PostService : IPostService
     {
         private readonly BlogDBContext _blogDBContext;
+        private readonly IPostRepository postRepository;
+        private readonly ICategoryRepository categoryRepository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public PostService(BlogDBContext blogDBContext)
+        public PostService(BlogDBContext blogDBContext, IPostRepository postRepository,
+            ICategoryRepository categoryRepository,
+            IUnitOfWork unitOfWork)
         {
             _blogDBContext = blogDBContext;
+            this.postRepository = postRepository;
+            this.categoryRepository = categoryRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task <PagedList<PostViewModel>> GetAllPostAsync(PostRequestModel postRequestModel)
@@ -74,7 +84,7 @@ namespace BlogWebApi.Services
             if (isExisting)
                 return -1;
 
-            var newPost = await _blogDBContext.Posts.AddAsync(new Post
+            var newPost = await postRepository.AddPostAsync(new Post
             {
                 Content = addPostViewModel.Content,
                 Title = addPostViewModel.Title,
@@ -84,8 +94,8 @@ namespace BlogWebApi.Services
                 ImagePath = addPostViewModel.ImagePath,
                 CreatedDate = DateTime.UtcNow
             });
-            await _blogDBContext.SaveChangesAsync();
-            return newPost?.Entity?.Id;
+            await postRepository.SaveAsync();
+            return newPost?.Id;
         }
 
         public async Task <int> DeletePostAsync(int id)
@@ -140,6 +150,40 @@ namespace BlogWebApi.Services
             post.UpdatedDate = DateTime.UtcNow;
             await _blogDBContext.SaveChangesAsync();
             return post.Id;
+        }
+    
+        public async Task TestUnitOfWork()
+        {
+            //--1. Add new category.
+            var category = await categoryRepository.AddCagtegoryAsync(new PostCategory
+            {
+                Name = "Name",
+                Slug = "Slug",
+                CreateAt = DateTime.UtcNow
+            }); //1 insert sucessfull => entityes of dbcontext
+            //--2. Add new post of category. 
+            //await _blogDBContext.SaveChangesAsync();
+
+            await postRepository.AddPostAsync(new Post
+            {
+                Content ="Test Content",
+                Title ="Test tile",
+                Description = "Test description",
+                //PostCategory = category,
+                PostCategoryId = 0,
+                Slug = "Slug",
+                ImagePath = "ImagePath",
+                CreatedDate = DateTime.UtcNow
+            }); //2 - error PostCategoryId = null => exception
+
+            //await _blogDBContext.SaveChangesAsync();
+
+            //1, 2 lúc này chưa có thêm dữ liệu database
+            //await _blogDBContext.SaveChangesAsync(); //Lúc này dữ liệu thêm xuống database
+            //await categoryRepository.SaveAsync();
+            //await postRepository.SaveAsync();
+            await unitOfWork.SaveAsync();
+
         }
     }
 }

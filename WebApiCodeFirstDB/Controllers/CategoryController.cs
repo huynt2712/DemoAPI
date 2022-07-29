@@ -33,12 +33,19 @@ namespace BlogWebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
-            var category = await _categoryService.GetCategoryByIdAsync(id);
-            if (category == null)
+            try
             {
-                return NotFound("The Post Category record couldn't be found.");
+                var category = await _categoryService.GetCategoryByIdAsync(id);
+                if (category == null)
+                {
+                    return NotFound("The Post Category record couldn't be found.");
+                }
+                return Ok(category);
             }
-            return Ok(category);
+            catch (Exception ex)
+            {
+                return BadRequest("Can not get category by id. Please check .....");
+            }
         }
 
         [Authorize]

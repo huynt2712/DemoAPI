@@ -10,6 +10,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using BlogWebApi.Repository;
+using BlogWebApi.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
     
@@ -21,7 +23,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+//add scrope, add transient, add single
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.Configure<Course>(builder.Configuration.GetSection("Course"));
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSetting"));
 

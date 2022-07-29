@@ -121,5 +121,12 @@ namespace BlogWebApi.Controllers
             }
             return Ok();
         }
+
+        [HttpGet("TestUnitOfWork")]
+        public async Task<IActionResult> Test()
+        {
+            await _postService.TestUnitOfWork();
+            return Ok();
+        }
     }
 }
